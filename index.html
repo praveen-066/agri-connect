@@ -1,13 +1,295 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>agri-store</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriStore - Premium Agricultural Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        agri: {
+                            green: '#059669',
+                            dark: '#022c22',
+                            light: '#d1fae5',
+                            accent: '#f59e0b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-stone-50 text-stone-900 antialiased">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-stone-200 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <div class="bg-agri-green p-2 rounded-lg text-white">
+                        <i data-lucide="leaf" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight">Agri<span class="text-agri-green">Store</span></span>
+                </div>
+
+                <button onclick="alert('Open Cart Feature Coming Soon!')"
+                    class="relative p-2 hover:bg-stone-100 rounded-full transition-colors">
+                    <i data-lucide="shopping-cart" class="w-6 h-6 text-stone-600"></i>
+                    <span id="cart-badge"
+                        class="hidden absolute -top-1 -right-1 bg-agri-accent text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
+        <div class="absolute top-0 right-0 -z-10 w-1/2 h-full bg-agri-light/30 rounded-bl-[100px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center lg:text-left lg:grid lg:grid-cols-2 lg:gap-12 items-center">
+                <div>
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-agri-light text-agri-dark text-sm font-medium mb-6">
+                        <span class="relative flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-agri-green opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-agri-green"></span>
+                        </span>
+                        New Harvest Season 2026
+                    </div>
+                    <h1 class="text-5xl lg:text-6xl font-bold text-stone-900 tracking-tight mb-6">
+                        Cultivate abundance with <span class="text-agri-green">premium inputs</span>
+                    </h1>
+                    <p class="text-xl text-stone-600 mb-8 leading-relaxed max-w-2xl">
+                        Source high-quality seeds, fertilizers, and tools. Bringing modern agricultural solutions to
+                        your doorstep.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="#products"
+                            class="inline-flex items-center justify-center gap-2 bg-agri-dark text-white px-8 py-3 rounded-xl font-semibold hover:bg-agri-green transition-all shadow-lg shadow-agri-green/20">
+                            Shop Now <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </a>
+                        <button
+                            class="inline-flex items-center justify-center gap-2 bg-white text-stone-900 border border-stone-200 px-8 py-3 rounded-xl font-semibold hover:bg-stone-50 transition-all">
+                            <i data-lucide="sprout" class="w-5 h-5"></i> Learn Growing
+                        </button>
+                    </div>
+                </div>
+                <div class="hidden lg:block relative mt-12 lg:mt-0">
+                    <div class="absolute inset-0 bg-agri-green rounded-3xl rotate-3 opacity-20 blur-xl"></div>
+                    <img src="https://images.unsplash.com/photo-1625246333195-bf436c92aa7f?auto=format&fit=crop&q=80&w=1000"
+                        alt="Agriculture"
+                        class="relative rounded-3xl shadow-2xl rotate-3 hover:rotate-0 transition-all duration-700" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <section id="products" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold text-stone-900 mb-2">Featured Products</h2>
+                    <p class="text-stone-500">Handpicked essentials for your farm.</p>
+                </div>
+                <a href="#"
+                    class="hidden md:block text-agri-green font-semibold hover:text-agri-dark transition-colors">View
+                    all products &rarr;</a>
+            </div>
+
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Products will be injected here by JS -->
+            </div>
+
+            <div class="mt-12 text-center md:hidden">
+                <a href="#" class="text-agri-green font-semibold hover:text-agri-dark transition-colors">View all
+                    products &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-16 bg-stone-100">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-stone-900 mb-6">Have Questions?</h2>
+            <p class="text-stone-500 mb-8">Reach out to us directly on WhatsApp for bulk orders or farming advice.</p>
+
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+                <div class="space-y-4 text-left">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-stone-700 mb-1">Your Name</label>
+                        <input type="text" id="name"
+                            class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-agri-green focus:border-transparent outline-none transition-all"
+                            placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-stone-700 mb-1">Message</label>
+                        <textarea id="message" rows="3"
+                            class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-agri-green focus:border-transparent outline-none transition-all"
+                            placeholder="I'm interested in buying..."></textarea>
+                    </div>
+                    <button onclick="sendToWhatsApp()"
+                        class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i> Chat on WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-stone-400">© 2026 AgriStore. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Icons
+        lucide.createIcons();
+
+        // Data
+        const products = [
+            {
+                id: 1,
+                name: "Organic Tomato Seeds",
+                category: "Seeds",
+                price: 150,
+                image: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?auto=format&fit=crop&q=80&w=800",
+                description: "High-yield organic tomato seeds perfect for home gardens."
+            },
+            {
+                id: 2,
+                name: "Premium Soil Mix",
+                category: "Fertilizer",
+                price: 450,
+                image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&q=80&w=800",
+                description: "Nutrient-rich soil mix for potted plants and vegetable beds."
+            },
+            {
+                id: 3,
+                name: "Gardening Trowel",
+                category: "Tools",
+                price: 299,
+                image: "https://images.unsplash.com/photo-1416872928419-dc4206935551?auto=format&fit=crop&q=80&w=800",
+                description: "Durable stainless steel trowel with ergonomic wooden handle."
+            },
+            {
+                id: 4,
+                name: "Natural Nitrogen Fertilizer",
+                category: "Fertilizer",
+                price: 899,
+                image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&q=80&w=800",
+                description: "Boost your crop growth safely with our organic nitrogen formula."
+            },
+            {
+                id: 5,
+                name: "Basil Herb Seeds",
+                category: "Seeds",
+                price: 120,
+                image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&q=80&w=800",
+                description: "Aromatic basil seeds, easy to grow and perfect for cooking."
+            },
+            {
+                id: 6,
+                name: "Watering Can (5L)",
+                category: "Tools",
+                price: 550,
+                image: "https://images.unsplash.com/photo-1536069221282-d877868cad6b?auto=format&fit=crop&q=80&w=800",
+                description: "Large capacity watering can with detachable rose head."
+            }
+        ];
+
+        // State
+        let cartCount = 0;
+
+        // Render Products
+        const productGrid = document.getElementById('product-grid');
+
+        products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = "bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-stone-100 group";
+            card.innerHTML = `
+                <div class="relative h-64 overflow-hidden">
+                    <img 
+                        src="${product.image}" 
+                        alt="${product.name}" 
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-stone-800 text-xs font-semibold px-2 py-1 rounded-md">
+                        ${product.category}
+                    </div>
+                </div>
+                <div class="p-5">
+                    <h3 class="text-lg font-bold text-stone-900 mb-1">${product.name}</h3>
+                    <p class="text-sm text-stone-500 mb-4 line-clamp-2">${product.description}</p>
+                    
+                    <div class="flex items-center justify-between mt-auto">
+                        <span class="text-xl font-bold text-agri-green">₹${product.price}</span>
+                        <button 
+                            onclick="addToCart('${product.name}')"
+                            class="flex items-center gap-1 bg-stone-900 hover:bg-agri-green text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                        >
+                            <span class="flex items-center gap-1"><i data-lucide="plus" class="w-4 h-4"></i> Add</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            productGrid.appendChild(card);
+        });
+
+        // Re-run icons for injected content
+        lucide.createIcons();
+
+        // Cart Logic
+        function addToCart(productName) {
+            cartCount++;
+            const badge = document.getElementById('cart-badge');
+            badge.innerText = cartCount;
+            badge.classList.remove('hidden');
+            badge.classList.add('flex');
+
+            // Subtle animation
+            badge.classList.add('scale-110');
+            setTimeout(() => badge.classList.remove('scale-110'), 150);
+
+            // Console log instead of alert to be less annoying
+            console.log(`Added ${productName} to cart`);
+        }
+
+        // WhatsApp Logic
+        function sendToWhatsApp() {
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            const phoneNumber = "916360760312"; // Updated to user Number
+
+            if (!name || !message) {
+                alert("Please fill in both name and message!");
+                return;
+            }
+
+            const text = `Hi, I am ${name}. ${message}`;
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
+
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+
 </html>
