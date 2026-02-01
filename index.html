@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -17,10 +18,24 @@
                     },
                     colors: {
                         agri: {
-                            green: '#059669',
-                            dark: '#022c22',
+                            green: '#10b981',
+                            dark: '#064e3b',
                             light: '#d1fae5',
                             accent: '#f59e0b',
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'slide-in-right': 'slideInRight 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(100%)' },
+                            '100%': { transform: 'translateX(0)' },
                         }
                     }
                 }
@@ -30,14 +45,32 @@
     <style>
         body {
             font-family: 'Outfit', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .cart-open {
+            overflow: hidden;
+        }
+
+        #cart-sidebar {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
 </head>
 
-<body class="bg-stone-50 text-stone-900 antialiased">
+<body class="bg-stone-50 text-stone-900 dark:bg-stone-950 dark:text-stone-100 antialiased">
 
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-stone-200 z-50">
+    <nav
+        class="fixed top-0 left-0 right-0 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md border-b border-stone-200 dark:border-stone-800 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center gap-2">
@@ -47,24 +80,65 @@
                     <span class="text-xl font-bold tracking-tight">Agri<span class="text-agri-green">Store</span></span>
                 </div>
 
-                <button onclick="alert('Open Cart Feature Coming Soon!')"
-                    class="relative p-2 hover:bg-stone-100 rounded-full transition-colors">
-                    <i data-lucide="shopping-cart" class="w-6 h-6 text-stone-600"></i>
-                    <span id="cart-badge"
-                        class="hidden absolute -top-1 -right-1 bg-agri-accent text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm">0</span>
-                </button>
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleDarkMode()"
+                        class="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors text-stone-600 dark:text-stone-400">
+                        <i data-lucide="moon" id="dark-mode-icon" class="w-6 h-6"></i>
+                    </button>
+                    <button onclick="toggleCart()"
+                        class="relative p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors">
+                        <i data-lucide="shopping-cart" class="w-6 h-6 text-stone-600 dark:text-stone-400"></i>
+                        <span id="cart-badge"
+                            class="hidden absolute -top-1 -right-1 bg-agri-accent text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm">0</span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
+    <!-- Cart Sidebar -->
+    <div id="cart-overlay" onclick="toggleCart()"
+        class="fixed inset-0 bg-stone-900/50 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300">
+    </div>
+    <div id="cart-sidebar"
+        class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white dark:bg-stone-900 shadow-2xl z-[70] transform translate-x-full">
+        <div class="flex flex-col h-full">
+            <div class="p-6 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center">
+                <h2 class="text-xl font-bold">Your Cart</h2>
+                <button onclick="toggleCart()" class="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+                <!-- Cart items injected here -->
+                <div id="empty-cart-msg" class="text-center py-12 text-stone-500">
+                    <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-4 opacity-20"></i>
+                    <p>Your cart is empty</p>
+                </div>
+            </div>
+            <div class="p-6 border-t border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900/50">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-stone-500">Subtotal</span>
+                    <span id="cart-total" class="text-2xl font-bold text-agri-green">₹0</span>
+                </div>
+                <button onclick="checkout()"
+                    class="w-full bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <div class="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
-        <div class="absolute top-0 right-0 -z-10 w-1/2 h-full bg-agri-light/30 rounded-bl-[100px]"></div>
+        <div
+            class="absolute top-0 right-0 -z-10 w-1/2 h-full bg-agri-light/30 dark:bg-agri-green/10 rounded-bl-[100px]">
+        </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center lg:text-left lg:grid lg:grid-cols-2 lg:gap-12 items-center">
-                <div>
+                <div class="animate-fade-in-up">
                     <div
-                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-agri-light text-agri-dark text-sm font-medium mb-6">
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-agri-light dark:bg-agri-green/20 text-agri-dark dark:text-agri-light text-sm font-medium mb-6">
                         <span class="relative flex h-2 w-2">
                             <span
                                 class="animate-ping absolute inline-flex h-full w-full rounded-full bg-agri-green opacity-75"></span>
@@ -72,25 +146,26 @@
                         </span>
                         New Harvest Season 2026
                     </div>
-                    <h1 class="text-5xl lg:text-6xl font-bold text-stone-900 tracking-tight mb-6">
+                    <h1 class="text-5xl lg:text-6xl font-bold text-stone-900 dark:text-white tracking-tight mb-6">
                         Cultivate abundance with <span class="text-agri-green">premium inputs</span>
                     </h1>
-                    <p class="text-xl text-stone-600 mb-8 leading-relaxed max-w-2xl">
+                    <p class="text-xl text-stone-600 dark:text-stone-400 mb-8 leading-relaxed max-w-2xl">
                         Source high-quality seeds, fertilizers, and tools. Bringing modern agricultural solutions to
                         your doorstep.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                         <a href="#products"
-                            class="inline-flex items-center justify-center gap-2 bg-agri-dark text-white px-8 py-3 rounded-xl font-semibold hover:bg-agri-green transition-all shadow-lg shadow-agri-green/20">
+                            class="inline-flex items-center justify-center gap-2 bg-agri-green text-white px-8 py-3 rounded-xl font-semibold hover:bg-agri-dark transition-all shadow-lg shadow-agri-green/20">
                             Shop Now <i data-lucide="arrow-right" class="w-5 h-5"></i>
                         </a>
                         <button
-                            class="inline-flex items-center justify-center gap-2 bg-white text-stone-900 border border-stone-200 px-8 py-3 rounded-xl font-semibold hover:bg-stone-50 transition-all">
+                            class="inline-flex items-center justify-center gap-2 bg-white dark:bg-stone-800 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-700 px-8 py-3 rounded-xl font-semibold hover:bg-stone-50 dark:hover:bg-stone-700 transition-all">
                             <i data-lucide="sprout" class="w-5 h-5"></i> Learn Growing
                         </button>
                     </div>
                 </div>
-                <div class="hidden lg:block relative mt-12 lg:mt-0">
+                <div
+                    class="hidden lg:block relative mt-12 lg:mt-0 opacity-0 animate-[fadeInUp_0.8s_ease-out_0.2s_forwards]">
                     <div class="absolute inset-0 bg-agri-green rounded-3xl rotate-3 opacity-20 blur-xl"></div>
                     <img src="https://images.unsplash.com/photo-1625246333195-bf436c92aa7f?auto=format&fit=crop&q=80&w=1000"
                         alt="Agriculture"
@@ -100,53 +175,160 @@
         </div>
     </div>
 
-    <!-- Products Section -->
-    <section id="products" class="py-16">
+    <!-- Search and Filters -->
+    <section id="products"
+        class="py-12 bg-white dark:bg-stone-900/50 sticky top-16 z-40 border-y border-stone-200 dark:border-stone-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
-                <div>
-                    <h2 class="text-3xl font-bold text-stone-900 mb-2">Featured Products</h2>
-                    <p class="text-stone-500">Handpicked essentials for your farm.</p>
+            <div class="flex flex-col lg:flex-row gap-6 justify-between items-center">
+                <div class="relative w-full lg:w-96">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400"></i>
+                    <input type="text" id="search-input" oninput="handleFilter()" placeholder="Search products..."
+                        class="w-full pl-10 pr-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none transition-all">
                 </div>
-                <a href="#"
-                    class="hidden md:block text-agri-green font-semibold hover:text-agri-dark transition-colors">View
-                    all products &rarr;</a>
-            </div>
-
-            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Products will be injected here by JS -->
-            </div>
-
-            <div class="mt-12 text-center md:hidden">
-                <a href="#" class="text-agri-green font-semibold hover:text-agri-dark transition-colors">View all
-                    products &rarr;</a>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="setCategory('All')"
+                        class="category-btn active px-4 py-2 rounded-lg text-sm font-medium transition-all border border-transparent bg-agri-green text-white">All</button>
+                    <button onclick="setCategory('Seeds')"
+                        class="category-btn px-4 py-2 rounded-lg text-sm font-medium transition-all border border-stone-200 dark:border-stone-700 hover:border-agri-green">Seeds</button>
+                    <button onclick="setCategory('Fertilizer')"
+                        class="category-btn px-4 py-2 rounded-lg text-sm font-medium transition-all border border-stone-200 dark:border-stone-700 hover:border-agri-green">Fertilizer</button>
+                    <button onclick="setCategory('Tools')"
+                        class="category-btn px-4 py-2 rounded-lg text-sm font-medium transition-all border border-stone-200 dark:border-stone-700 hover:border-agri-green">Tools</button>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="py-16 bg-stone-100">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold text-stone-900 mb-6">Have Questions?</h2>
-            <p class="text-stone-500 mb-8">Reach out to us directly on WhatsApp for bulk orders or farming advice.</p>
+    <!-- Products Grid -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Products will be injected here by JS -->
+            </div>
+            <div id="no-results" class="hidden text-center py-24">
+                <i data-lucide="search-x" class="w-16 h-16 mx-auto mb-4 text-stone-300"></i>
+                <h3 class="text-xl font-bold mb-2">No products found</h3>
+                <p class="text-stone-500">Try adjusting your search or filters</p>
+            </div>
+        </div>
+    </section>
 
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
-                <div class="space-y-4 text-left">
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-stone-700 mb-1">Your Name</label>
-                        <input type="text" id="name"
-                            class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-agri-green focus:border-transparent outline-none transition-all"
-                            placeholder="John Doe">
+    <!-- Product Modal -->
+    <div id="product-modal" onclick="closeModal()"
+        class="fixed inset-0 bg-stone-900/80 backdrop-blur-md z-[80] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div onclick="event.stopPropagation()"
+            class="bg-white dark:bg-stone-900 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl relative">
+            <button onclick="closeModal()"
+                class="absolute top-4 right-4 p-2 bg-stone-100 dark:bg-stone-800 rounded-full hover:bg-stone-200 transition-colors z-10">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="grid lg:grid-cols-2">
+                <div class="h-64 lg:h-full">
+                    <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
+                </div>
+                <div class="p-8 lg:p-12 flex flex-col justify-center">
+                    <span id="modal-category"
+                        class="bg-agri-light/50 dark:bg-agri-green/20 text-agri-dark dark:text-agri-light text-xs font-bold px-3 py-1 rounded-full w-fit mb-4"></span>
+                    <h2 id="modal-name" class="text-3xl font-bold mb-4"></h2>
+                    <p id="modal-desc" class="text-stone-600 dark:text-stone-400 mb-8 leading-relaxed"></p>
+                    <div
+                        class="flex items-center justify-between mt-auto pt-6 border-t border-stone-100 dark:border-stone-800">
+                        <span id="modal-price" class="text-3xl font-bold text-agri-green"></span>
+                        <button id="modal-add-btn"
+                            class="bg-agri-green hover:bg-agri-dark text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-agri-green/20">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" onclick="closeCheckout()"
+        class="fixed inset-0 bg-stone-900/80 backdrop-blur-md z-[90] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div onclick="event.stopPropagation()"
+            class="bg-white dark:bg-stone-900 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl relative p-8">
+            <button onclick="closeCheckout()"
+                class="absolute top-4 right-4 p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h2 class="text-2xl font-bold mb-6">Complete Your Order</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Full Name</label>
+                    <input type="text" id="checkout-name"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                        placeholder="Enter your name">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Phone Number</label>
+                    <input type="tel" id="checkout-phone"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                        placeholder="e.g. +91 9876543210">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Delivery Address</label>
+                    <textarea id="checkout-address" rows="3"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                        placeholder="Street, City, Pincode"></textarea>
+                </div>
+                <div class="pt-4 border-t border-stone-100 dark:border-stone-800">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-stone-500 font-medium">Grand Total</span>
+                        <span id="checkout-total" class="text-2xl font-bold text-agri-green">₹0</span>
+                    </div>
+                    <button onclick="confirmOrder()"
+                        class="w-full bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">
+                        Confirm & Order via WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section class="py-24 bg-stone-100 dark:bg-stone-900/30">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold text-stone-900 dark:text-white mb-6">Expert Farming Advice</h2>
+            <p class="text-lg text-stone-500 dark:text-stone-400 mb-12">Connect with our agricultural specialists on
+                WhatsApp for personalized recommendations and bulk orders.</p>
+
+            <div
+                class="bg-white dark:bg-stone-800 p-8 lg:p-10 rounded-[2rem] shadow-xl shadow-stone-200/50 dark:shadow-none border border-stone-200 dark:border-stone-700">
+                <div class="space-y-6 text-left">
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name"
+                                class="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">Full
+                                Name</label>
+                            <input type="text" id="name"
+                                class="w-full px-5 py-3 rounded-xl border border-stone-200 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 focus:ring-2 focus:ring-agri-green outline-none transition-all"
+                                placeholder="Enter your name">
+                        </div>
+                        <div>
+                            <label for="subject"
+                                class="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">Subject</label>
+                            <select id="subject"
+                                class="w-full px-5 py-3 rounded-xl border border-stone-200 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 focus:ring-2 focus:ring-agri-green outline-none transition-all">
+                                <option>Product Inquiry</option>
+                                <option>Bulk Order</option>
+                                <option>Farming Advice</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
                     </div>
                     <div>
-                        <label for="message" class="block text-sm font-medium text-stone-700 mb-1">Message</label>
-                        <textarea id="message" rows="3"
-                            class="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-agri-green focus:border-transparent outline-none transition-all"
-                            placeholder="I'm interested in buying..."></textarea>
+                        <label for="message"
+                            class="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">Message</label>
+                        <textarea id="message" rows="4"
+                            class="w-full px-5 py-3 rounded-xl border border-stone-200 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 focus:ring-2 focus:ring-agri-green outline-none transition-all"
+                            placeholder="How can we help you?"></textarea>
                     </div>
                     <button onclick="sendToWhatsApp()"
-                        class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
-                        <i data-lucide="message-circle" class="w-5 h-5"></i> Chat on WhatsApp
+                        class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-3 shadow-lg shadow-green-500/20">
+                        <i data-lucide="message-circle" class="w-6 h-6"></i>
+                        Contact on WhatsApp
                     </button>
                 </div>
             </div>
@@ -154,16 +336,49 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-stone-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-stone-400">© 2026 AgriStore. All rights reserved.</p>
+    <footer class="bg-stone-900 dark:bg-black text-white py-16 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-12 mb-12">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-agri-green p-2 rounded-lg text-white">
+                            <i data-lucide="leaf" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-2xl font-bold">AgriStore</span>
+                    </div>
+                    <p class="text-stone-400">Leading provider of premium agricultural inputs and modern farming
+                        solutions.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-6">Quick Links</h3>
+                    <ul class="space-y-3 text-stone-400">
+                        <li><a href="#" class="hover:text-agri-green transition-colors">Products</a></li>
+                        <li><a href="#" class="hover:text-agri-green transition-colors">Bulk Orders</a></li>
+                        <li><a href="#" class="hover:text-agri-green transition-colors">Farming Tips</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-6">Contact</h3>
+                    <ul class="space-y-3 text-stone-400">
+                        <li>Email: support@agristore.com</li>
+                        <li>Phone: +91 63607 60312</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-stone-800 text-center text-stone-500">
+                <p>© 2026 AgriStore. Designed for modern agriculture.</p>
+            </div>
         </div>
     </footer>
 
-    <script>
-        // Icons
-        lucide.createIcons();
+    <!-- Toast Notification -->
+    <div id="toast"
+        class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900 dark:bg-agri-green text-white px-6 py-3 rounded-full shadow-2xl z-[100] hidden transform translate-y-20 transition-all duration-300 flex items-center gap-3">
+        <i data-lucide="check-circle" class="w-5 h-5 text-agri-green dark:text-white"></i>
+        <span id="toast-msg">Added to cart</span>
+    </div>
 
+    <script>
         // Data
         const products = [
             {
@@ -172,7 +387,7 @@
                 category: "Seeds",
                 price: 150,
                 image: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?auto=format&fit=crop&q=80&w=800",
-                description: "High-yield organic tomato seeds perfect for home gardens."
+                description: "Vibrant and healthy organic tomato seeds, specifically bred for high yield and excellent disease resistance. Perfect for both garden beds and larger farming plots."
             },
             {
                 id: 2,
@@ -180,7 +395,7 @@
                 category: "Fertilizer",
                 price: 450,
                 image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&q=80&w=800",
-                description: "Nutrient-rich soil mix for potted plants and vegetable beds."
+                description: "Our signature blend of peat, compost, and essential minerals. This premium soil mix provides the perfect foundation for strong root development and nutrient uptake."
             },
             {
                 id: 3,
@@ -188,7 +403,7 @@
                 category: "Tools",
                 price: 299,
                 image: "https://images.unsplash.com/photo-1416872928419-dc4206935551?auto=format&fit=crop&q=80&w=800",
-                description: "Durable stainless steel trowel with ergonomic wooden handle."
+                description: "Professional grade stainless steel trowel. Features an ergonomic hardwood handle and measurement markings for precise planting depth."
             },
             {
                 id: 4,
@@ -196,7 +411,7 @@
                 category: "Fertilizer",
                 price: 899,
                 image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&q=80&w=800",
-                description: "Boost your crop growth safely with our organic nitrogen formula."
+                description: "A fast-acting, organic liquid fertilizer rich in nitrogen. Ideal for leafy greens and vegetables during their peak growth stages."
             },
             {
                 id: 5,
@@ -204,7 +419,7 @@
                 category: "Seeds",
                 price: 120,
                 image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&q=80&w=800",
-                description: "Aromatic basil seeds, easy to grow and perfect for cooking."
+                description: "Highly aromatic Genovese basil seeds. Easy to germinate and grows vigorously in sunlight. Perfect for culinary enthusiasts."
             },
             {
                 id: 6,
@@ -212,82 +427,359 @@
                 category: "Tools",
                 price: 550,
                 image: "https://images.unsplash.com/photo-1536069221282-d877868cad6b?auto=format&fit=crop&q=80&w=800",
-                description: "Large capacity watering can with detachable rose head."
+                description: "Balanced design with a long reach spout. Includes a brass rose head for gentle watering of small seedlings and delicate plants."
             }
         ];
 
         // State
-        let cartCount = 0;
+        let cart = JSON.parse(localStorage.getItem('agri_cart')) || [];
+        let currentCategory = 'All';
+        let isDarkMode = localStorage.getItem('agri_theme') === 'dark';
 
-        // Render Products
-        const productGrid = document.getElementById('product-grid');
+        // Init
+        window.onload = () => {
+            applyInitialTheme();
+            updateCartUI();
+            renderProducts(products);
+            lucide.createIcons();
+        };
 
-        products.forEach(product => {
-            const card = document.createElement('div');
-            card.className = "bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-stone-100 group";
-            card.innerHTML = `
-                <div class="relative h-64 overflow-hidden">
-                    <img 
-                        src="${product.image}" 
-                        alt="${product.name}" 
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div class="absolute top-3 left-3 bg-white/90 backdrop-blur text-stone-800 text-xs font-semibold px-2 py-1 rounded-md">
-                        ${product.category}
+        // Theme
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.documentElement.classList.toggle('dark', isDarkMode);
+            localStorage.setItem('agri_theme', isDarkMode ? 'dark' : 'light');
+            updateDarkModeIcon();
+        }
+
+        function applyInitialTheme() {
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark');
+            }
+            updateDarkModeIcon();
+        }
+
+        function updateDarkModeIcon() {
+            const icon = document.getElementById('dark-mode-icon');
+            icon.setAttribute('data-lucide', isDarkMode ? 'sun' : 'moon');
+            lucide.createIcons();
+        }
+
+        // Filtering
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.innerText === cat) {
+                    btn.classList.add('bg-agri-green', 'text-white', 'border-transparent');
+                    btn.classList.remove('border-stone-200', 'dark:border-stone-700');
+                } else {
+                    btn.classList.remove('bg-agri-green', 'text-white', 'border-transparent');
+                    btn.classList.add('border-stone-200', 'dark:border-stone-700');
+                }
+            });
+            handleFilter();
+        }
+
+        function handleFilter() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = products.filter(p => {
+                const matchesSearch = p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
+                const matchesCategory = currentCategory === 'All' || p.category === currentCategory;
+                return matchesSearch && matchesCategory;
+            });
+            renderProducts(filtered);
+        }
+
+        // Rendering
+        function renderProducts(items) {
+            const grid = document.getElementById('product-grid');
+            const noResults = document.getElementById('no-results');
+            grid.innerHTML = '';
+
+            if (items.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+
+            items.forEach((p, idx) => {
+                const card = document.createElement('div');
+                card.className = `bg-white dark:bg-stone-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-stone-100 dark:border-stone-700 group cursor-pointer animate-fade-in-up`;
+                card.style.animationDelay = `${idx * 0.1}s`;
+                card.onclick = () => openModal(p);
+                card.innerHTML = `
+                    <div class="relative h-72 overflow-hidden">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                        <div class="absolute top-4 left-4 bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-stone-800 dark:text-stone-200 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
+                            ${p.category}
+                        </div>
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                             <button onclick="event.stopPropagation(); buyNow(${p.id})" class="bg-white text-stone-900 px-4 py-2 rounded-lg font-bold text-sm hover:bg-agri-green hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300">
+                                Buy Now
+                             </button>
+                        </div>
                     </div>
-                </div>
-                <div class="p-5">
-                    <h3 class="text-lg font-bold text-stone-900 mb-1">${product.name}</h3>
-                    <p class="text-sm text-stone-500 mb-4 line-clamp-2">${product.description}</p>
-                    
-                    <div class="flex items-center justify-between mt-auto">
-                        <span class="text-xl font-bold text-agri-green">₹${product.price}</span>
-                        <button 
-                            onclick="addToCart('${product.name}')"
-                            class="flex items-center gap-1 bg-stone-900 hover:bg-agri-green text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                        >
-                            <span class="flex items-center gap-1"><i data-lucide="plus" class="w-4 h-4"></i> Add</span>
-                        </button>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-stone-900 dark:text-white mb-2 group-hover:text-agri-green transition-colors">${p.name}</h3>
+                        <p class="text-stone-500 dark:text-stone-400 text-sm line-clamp-2 mb-6">${p.description}</p>
+                        <div class="flex items-center justify-between mt-auto">
+                            <span class="text-2xl font-bold text-agri-green">₹${p.price}</span>
+                            <button onclick="event.stopPropagation(); addToCart(${p.id})" class="flex items-center gap-2 bg-stone-900 dark:bg-white text-white dark:text-stone-900 px-5 py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 group-hover:bg-agri-green group-hover:text-white">
+                                <i data-lucide="shopping-cart" class="w-4 h-4"></i> Add
+                            </button>
+                        </div>
                     </div>
-                </div>
-            `;
-            productGrid.appendChild(card);
-        });
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
 
-        // Re-run icons for injected content
-        lucide.createIcons();
+        // Modal Logic
+        function openModal(p) {
+            document.getElementById('modal-img').src = p.image;
+            document.getElementById('modal-name').innerText = p.name;
+            document.getElementById('modal-desc').innerText = p.description;
+            document.getElementById('modal-price').innerText = `₹${p.price}`;
+            document.getElementById('modal-category').innerText = p.category;
+
+            const addBtn = document.getElementById('modal-add-btn');
+            addBtn.onclick = () => {
+                addToCart(p.id);
+                closeModal();
+            };
+
+            // Add Buy Now to Modal if missing
+            let existingBuyBtn = document.getElementById('modal-buy-btn');
+            if (!existingBuyBtn) {
+                existingBuyBtn = document.createElement('button');
+                existingBuyBtn.id = 'modal-buy-btn';
+                existingBuyBtn.className = "ml-4 bg-white dark:bg-stone-800 border-2 border-agri-green text-agri-green hover:bg-agri-green hover:text-white px-8 py-3 rounded-xl font-bold transition-all";
+                existingBuyBtn.innerText = "Buy Now";
+                document.getElementById('modal-add-btn').parentElement.appendChild(existingBuyBtn);
+            }
+            existingBuyBtn.onclick = () => buyNow(p.id);
+
+            const modal = document.getElementById('product-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+            document.body.classList.add('cart-open');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('product-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+            document.body.classList.remove('cart-open');
+        }
 
         // Cart Logic
-        function addToCart(productName) {
-            cartCount++;
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            const isOpen = !sidebar.classList.contains('translate-x-full');
+
+            if (isOpen) {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+                document.body.classList.remove('cart-open');
+            } else {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+                document.body.classList.add('cart-open');
+                updateCartUI();
+            }
+        }
+
+        function addToCart(productId) {
+            const p = products.find(x => x.id === productId);
+            const exists = cart.find(item => item.id === productId);
+
+            if (exists) {
+                exists.quantity += 1;
+            } else {
+                cart.push({ ...p, quantity: 1 });
+            }
+
+            saveCart();
+            showToast(`Added ${p.name} to cart`);
+            updateCartUI();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            saveCart();
+            updateCartUI();
+        }
+
+        function updateQuantity(productId, delta) {
+            const item = cart.find(x => x.id === productId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    saveCart();
+                    updateCartUI();
+                }
+            }
+        }
+
+        function saveCart() {
+            localStorage.setItem('agri_cart', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const itemsContainer = document.getElementById('cart-items');
+            const emptyMsg = document.getElementById('empty-cart-msg');
             const badge = document.getElementById('cart-badge');
-            badge.innerText = cartCount;
-            badge.classList.remove('hidden');
-            badge.classList.add('flex');
+            const totalDisplay = document.getElementById('cart-total');
 
-            // Subtle animation
-            badge.classList.add('scale-110');
-            setTimeout(() => badge.classList.remove('scale-110'), 150);
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-            // Console log instead of alert to be less annoying
-            console.log(`Added ${productName} to cart`);
+            badge.innerText = count;
+            badge.classList.toggle('hidden', count === 0);
+            totalDisplay.innerText = `₹${total}`;
+
+            if (cart.length === 0) {
+                emptyMsg.classList.remove('hidden');
+                itemsContainer.querySelectorAll('.cart-item-row').forEach(el => el.remove());
+            } else {
+                emptyMsg.classList.add('hidden');
+                itemsContainer.querySelectorAll('.cart-item-row').forEach(el => el.remove());
+
+                cart.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = 'cart-item-row flex gap-4 bg-stone-50 dark:bg-stone-800/50 p-4 rounded-2xl border border-stone-100 dark:border-stone-700';
+                    row.innerHTML = `
+                        <img src="${item.image}" class="w-16 h-16 rounded-lg object-cover" />
+                        <div class="flex-1">
+                            <h4 class="font-bold text-sm">${item.name}</h4>
+                            <p class="text-agri-green font-bold text-sm">₹${item.price}</p>
+                            <div class="flex items-center gap-3 mt-2">
+                                <button onclick="updateQuantity(${item.id}, -1)" class="w-6 h-6 border dark:border-stone-600 rounded flex items-center justify-center hover:bg-stone-200 dark:hover:bg-stone-700">-</button>
+                                <span class="text-xs font-bold">${item.quantity}</span>
+                                <button onclick="updateQuantity(${item.id}, 1)" class="w-6 h-6 border dark:border-stone-600 rounded flex items-center justify-center hover:bg-stone-200 dark:hover:bg-stone-700">+</button>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart(${item.id})" class="text-stone-400 hover:text-red-500 transition-colors">
+                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                        </button>
+                    `;
+                    itemsContainer.appendChild(row);
+                });
+            }
+            lucide.createIcons();
         }
 
         // WhatsApp Logic
         function sendToWhatsApp() {
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
-            const phoneNumber = "916360760312"; // Updated to user Number
+            const subject = document.getElementById('subject').value;
+            const phoneNumber = "916360760312";
 
             if (!name || !message) {
-                alert("Please fill in both name and message!");
+                showToast("Please fill in required fields", true);
                 return;
             }
 
-            const text = `Hi, I am ${name}. ${message}`;
+            const text = `*New Inquiry from AgriStore*\n\n*Name:* ${name}\n*Subject:* ${subject}\n*Message:* ${message}`;
             const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
-
             window.open(url, '_blank');
+        }
+
+        // Checkout Logic
+        function openCheckout() {
+            if (cart.length === 0) {
+                showToast("Your cart is empty!", true);
+                return;
+            }
+            const modal = document.getElementById('checkout-modal');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('checkout-total').innerText = `₹${total}`;
+
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            document.body.classList.add('cart-open');
+        }
+
+        function closeCheckout() {
+            const modal = document.getElementById('checkout-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+            document.body.classList.remove('cart-open');
+        }
+
+        function confirmOrder() {
+            const name = document.getElementById('checkout-name').value;
+            const phone = document.getElementById('checkout-phone').value;
+            const address = document.getElementById('checkout-address').value;
+
+            if (!name || !phone || !address) {
+                alert("Please fill in all checkout details!");
+                return;
+            }
+
+            let orderDetails = `*🚀 New Order from AgriStore*\n\n`;
+            orderDetails += `*👤 Customer:* ${name}\n`;
+            orderDetails += `*📞 Phone:* ${phone}\n`;
+            orderDetails += `*📍 Address:* ${address}\n\n`;
+            orderDetails += `*📦 Items:*\n`;
+
+            cart.forEach(item => {
+                orderDetails += `- ${item.name} (x${item.quantity}) - ₹${item.price * item.quantity}\n`;
+            });
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            orderDetails += `\n*💰 Total Amount:* ₹${total}`;
+
+            const url = `https://wa.me/916360760312?text=${encodeURIComponent(orderDetails)}`;
+            window.open(url, '_blank');
+
+            // Success cleanup
+            cart = [];
+            saveCart();
+            updateCartUI();
+            closeCheckout();
+            if (!document.getElementById('cart-sidebar').classList.contains('translate-x-full')) toggleCart();
+            showToast("Order sent successfully!");
+        }
+
+        function checkout() { // This triggers from the Sidebar
+            openCheckout();
+        }
+
+        function buyNow(productId) {
+            const existsInCart = cart.find(item => item.id === productId);
+            if (!existsInCart) {
+                const p = products.find(x => x.id === productId);
+                cart.push({ ...p, quantity: 1 });
+                saveCart();
+                updateCartUI();
+            }
+            closeModal();
+            openCheckout();
+        }
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-msg');
+            msgEl.innerText = msg;
+
+            toast.classList.remove('hidden', 'translate-y-20');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 3000);
         }
     </script>
 </body>
