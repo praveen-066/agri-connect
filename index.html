@@ -720,17 +720,68 @@
         ];
 
         // State
-        let cart = JSON.parse(localStorage.getItem('agri_cart')) || [];
         let currentCategory = 'All';
         let isDarkMode = localStorage.getItem('agri_theme') === 'dark';
         let currentUser = JSON.parse(localStorage.getItem('agri_current_user')) || null;
         let users = JSON.parse(localStorage.getItem('agri_users')) || [];
-        let wishlist = JSON.parse(localStorage.getItem('agri_wishlist')) || [];
-        let orders = JSON.parse(localStorage.getItem('agri_orders')) || [];
         let appliedDiscount = 0;
+
+        // User Data
+        let cart = [];
+        let wishlist = [];
+        let orders = [];
+
+        function getStorageKey(baseKey, userId = null) {
+            const id = userId || (currentUser ? currentUser.id : null);
+            return id ? `${baseKey}_${id}` : baseKey;
+        }
+
+        function loadUserData() {
+            const guestCart = JSON.parse(localStorage.getItem('agri_cart')) || [];
+            const guestWishlist = JSON.parse(localStorage.getItem('agri_wishlist')) || [];
+
+            cart = JSON.parse(localStorage.getItem(getStorageKey('agri_cart'))) || [];
+            wishlist = JSON.parse(localStorage.getItem(getStorageKey('agri_wishlist'))) || [];
+            orders = JSON.parse(localStorage.getItem(getStorageKey('agri_orders'))) || [];
+
+            if (currentUser && (guestCart.length > 0 || guestWishlist.length > 0)) {
+                // Merge guest cart
+                guestCart.forEach(gItem => {
+                    const existing = cart.find(uItem => uItem.id === gItem.id);
+                    if (existing) existing.quantity += gItem.quantity;
+                    else cart.push(gItem);
+                });
+                // Merge guest wishlist
+                guestWishlist.forEach(id => {
+                    if (!wishlist.includes(id)) wishlist.push(id);
+                });
+
+                // Save merged results
+                saveCart();
+                localStorage.setItem(getStorageKey('agri_wishlist'), JSON.stringify(wishlist));
+
+                // Clear guest data
+                localStorage.removeItem('agri_cart');
+                localStorage.removeItem('agri_wishlist');
+                localStorage.removeItem('agri_orders');
+            }
+        }
+
+        function saveCart() {
+            localStorage.setItem(getStorageKey('agri_cart'), JSON.stringify(cart));
+        }
+
+        function saveWishlist() {
+            localStorage.setItem(getStorageKey('agri_wishlist'), JSON.stringify(wishlist));
+        }
+
+        function saveOrders() {
+            localStorage.setItem(getStorageKey('agri_orders'), JSON.stringify(orders));
+        }
 
         // Init
         window.onload = () => {
+            loadUserData();
             applyInitialTheme();
             updateCartUI();
             updateAuthUI();
@@ -787,7 +838,10 @@
             currentUser = newUser;
             localStorage.setItem('agri_current_user', JSON.stringify(currentUser));
 
+            loadUserData();
             updateAuthUI();
+            updateCartUI();
+            renderProducts(products); // Refresh to show wishlist status
             closeAuthModal();
             showToast(`Welcome, ${name}!`);
         }
@@ -800,7 +854,10 @@
             if (user) {
                 currentUser = user;
                 localStorage.setItem('agri_current_user', JSON.stringify(currentUser));
+                loadUserData();
                 updateAuthUI();
+                updateCartUI();
+                renderProducts(products); // Refresh to show wishlist status
                 closeAuthModal();
                 showToast(`Welcome back, ${user.name}!`);
             } else {
@@ -811,7 +868,10 @@
         function handleLogout() {
             currentUser = null;
             localStorage.removeItem('agri_current_user');
+            loadUserData();
             updateAuthUI();
+            updateCartUI();
+            renderProducts(products); // Refresh to clear wishlist status
             showToast("Logged out successfully");
         }
 
@@ -872,7 +932,7 @@
                 wishlist.push(productId);
                 showToast("Added to wishlist");
             }
-            localStorage.setItem('agri_wishlist', JSON.stringify(wishlist));
+            saveWishlist();
             renderProducts(products);
         }
 
@@ -1107,9 +1167,6 @@
             }
         }
 
-        function saveCart() {
-            localStorage.setItem('agri_cart', JSON.stringify(cart));
-        }
 
         function updateCartUI() {
             const itemsContainer = document.getElementById('cart-items');
@@ -1228,6 +1285,15 @@
             window.open(url, '_blank');
 
             // Success cleanup
+            const orderRecord = {
+                id: Date.now(),
+                items: [...cart],
+                total: finalTotal,
+                date: new Date().toISOString()
+            };
+            orders.push(orderRecord);
+            saveOrders();
+
             cart = [];
             saveCart();
             updateCartUI();
