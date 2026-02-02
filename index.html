@@ -91,6 +91,44 @@
                         <span id="cart-badge"
                             class="hidden absolute -top-1 -right-1 bg-agri-accent text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm">0</span>
                     </button>
+
+                    <!-- User Profile Section -->
+                    <div id="user-section"
+                        class="flex items-center gap-2 border-l border-stone-200 dark:border-stone-800 pl-4 ml-2">
+                        <button id="login-btn" onclick="openAuthModal()"
+                            class="bg-agri-green text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-agri-dark transition-all">
+                            Login
+                        </button>
+                        <div id="user-profile" class="hidden relative group">
+                            <button
+                                class="flex items-center gap-2 p-1 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 transition-all">
+                                <div class="w-8 h-8 rounded-full bg-agri-green flex items-center justify-center text-white font-bold text-sm"
+                                    id="user-avatar-char">
+                                    U
+                                </div>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400"></i>
+                            </button>
+                            <div
+                                class="absolute right-0 mt-2 w-48 bg-white dark:bg-stone-900 border border-stone-100 dark:border-stone-800 rounded-2xl shadow-xl py-2 hidden group-hover:block animate-fade-in-up">
+                                <div class="px-4 py-2 border-b border-stone-100 dark:border-stone-800 mb-1">
+                                    <p class="text-xs text-stone-500">Welcome,</p>
+                                    <p class="font-bold truncate" id="user-name-display">User</p>
+                                </div>
+                                <button onclick="openOrdersModal()"
+                                    class="w-full text-left px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-800 text-sm flex items-center gap-2">
+                                    <i data-lucide="package" class="w-4 h-4"></i> My Orders
+                                </button>
+                                <button onclick="openWishlistModal()"
+                                    class="w-full text-left px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-800 text-sm flex items-center gap-2">
+                                    <i data-lucide="heart" class="w-4 h-4"></i> Wishlist
+                                </button>
+                                <button onclick="handleLogout()"
+                                    class="w-full text-left px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-800 text-sm flex items-center gap-2 text-red-500">
+                                    <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -167,8 +205,8 @@
                 <div
                     class="hidden lg:block relative mt-12 lg:mt-0 opacity-0 animate-[fadeInUp_0.8s_ease-out_0.2s_forwards]">
                     <div class="absolute inset-0 bg-agri-green rounded-3xl rotate-3 opacity-20 blur-xl"></div>
-                    <img src="https://images.unsplash.com/photo-1625246333195-bf436c92aa7f?auto=format&fit=crop&q=80&w=1000"
-                        alt="Agriculture"
+                    <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1000"
+                        alt="Modern Agriculture Field"
                         class="relative rounded-3xl shadow-2xl rotate-3 hover:rotate-0 transition-all duration-700" />
                 </div>
             </div>
@@ -229,15 +267,43 @@
                 <div class="p-8 lg:p-12 flex flex-col justify-center">
                     <span id="modal-category"
                         class="bg-agri-light/50 dark:bg-agri-green/20 text-agri-dark dark:text-agri-light text-xs font-bold px-3 py-1 rounded-full w-fit mb-4"></span>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="flex text-agri-accent">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        </div>
+                        <span id="modal-rating" class="text-xs text-stone-500 font-medium"></span>
+                    </div>
                     <h2 id="modal-name" class="text-3xl font-bold mb-4"></h2>
-                    <p id="modal-desc" class="text-stone-600 dark:text-stone-400 mb-8 leading-relaxed"></p>
+                    <p id="modal-desc" class="text-stone-600 dark:text-stone-400 mb-6 leading-relaxed"></p>
+
+                    <div class="grid grid-cols-3 gap-4 mb-8 pt-6 border-t border-stone-100 dark:border-stone-800">
+                        <div class="text-center">
+                            <p class="text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-1">Weight</p>
+                            <p id="spec-weight" class="text-sm font-bold"></p>
+                        </div>
+                        <div class="text-center border-x border-stone-100 dark:border-stone-800">
+                            <p class="text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-1">Brand</p>
+                            <p id="spec-brand" class="text-sm font-bold"></p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-1">Usage</p>
+                            <p id="spec-usage" class="text-sm font-bold"></p>
+                        </div>
+                    </div>
+
                     <div
                         class="flex items-center justify-between mt-auto pt-6 border-t border-stone-100 dark:border-stone-800">
                         <span id="modal-price" class="text-3xl font-bold text-agri-green"></span>
-                        <button id="modal-add-btn"
-                            class="bg-agri-green hover:bg-agri-dark text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-agri-green/20">
-                            Add to Cart
-                        </button>
+                        <div class="flex items-center gap-3">
+                            <button id="modal-add-btn"
+                                class="bg-agri-green hover:bg-agri-dark text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-agri-green/20">
+                                Add to Cart
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -274,6 +340,19 @@
                         placeholder="Street, City, Pincode"></textarea>
                 </div>
                 <div class="pt-4 border-t border-stone-100 dark:border-stone-800">
+                    <label class="block text-sm font-semibold mb-2">Discount Coupon</label>
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="coupon-input"
+                            class="flex-1 px-4 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none uppercase text-sm"
+                            placeholder="Enter Code (e.g. AGRI10)">
+                        <button onclick="applyCoupon()"
+                            class="bg-stone-900 dark:bg-white text-white dark:text-stone-900 px-4 py-2 rounded-xl text-sm font-bold">
+                            Apply
+                        </button>
+                    </div>
+                    <div id="coupon-msg" class="text-xs mb-4 hidden"></div>
+                </div>
+                <div class="pt-4 border-t border-stone-100 dark:border-stone-800">
                     <div class="flex justify-between items-center mb-6">
                         <span class="text-stone-500 font-medium">Grand Total</span>
                         <span id="checkout-total" class="text-2xl font-bold text-agri-green">₹0</span>
@@ -283,6 +362,108 @@
                         Confirm & Order via WhatsApp
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" onclick="closeAuthModal()"
+        class="fixed inset-0 bg-stone-900/80 backdrop-blur-md z-[100] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div onclick="event.stopPropagation()"
+            class="bg-white dark:bg-stone-900 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl relative p-8">
+            <button onclick="closeAuthModal()"
+                class="absolute top-4 right-4 p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <div id="login-form">
+                <h2 class="text-3xl font-bold mb-2">Welcome Back</h2>
+                <p class="text-stone-500 mb-8">Login to manage your orders</p>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Email Address</label>
+                        <input type="email" id="login-email"
+                            class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                            placeholder="name@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Password</label>
+                        <input type="password" id="login-password"
+                            class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                            placeholder="••••••••">
+                    </div>
+                    <button onclick="handleLogin()"
+                        class="w-full bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">
+                        Login
+                    </button>
+                    <p class="text-center text-sm text-stone-500">
+                        Don't have an account?
+                        <button onclick="toggleAuthMode('signup')" class="text-agri-green font-bold">Sign Up</button>
+                    </p>
+                </div>
+            </div>
+
+            <div id="signup-form" class="hidden">
+                <h2 class="text-3xl font-bold mb-2">Join AgriStore</h2>
+                <p class="text-stone-500 mb-8">Start your modern farming journey</p>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Full Name</label>
+                        <input type="text" id="signup-name"
+                            class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                            placeholder="Your Name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Email Address</label>
+                        <input type="email" id="signup-email"
+                            class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                            placeholder="name@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">Password</label>
+                        <input type="password" id="signup-password"
+                            class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                            placeholder="••••••••">
+                    </div>
+                    <button onclick="handleSignup()"
+                        class="w-full bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">
+                        Create Account
+                    </button>
+                    <p class="text-center text-sm text-stone-500">
+                        Already have an account?
+                        <button onclick="toggleAuthMode('login')" class="text-agri-green font-bold">Login</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tip Modal -->
+    <div id="tip-modal" onclick="closeTipModal()"
+        class="fixed inset-0 bg-stone-900/80 backdrop-blur-md z-[100] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div onclick="event.stopPropagation()"
+            class="bg-white dark:bg-stone-900 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl relative p-8">
+            <button onclick="closeTipModal()"
+                class="absolute top-4 right-4 p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="flex items-center gap-6 mb-8">
+                <div id="tip-modal-icon"
+                    class="w-20 h-20 bg-agri-light dark:bg-agri-green/20 rounded-2xl flex items-center justify-center text-agri-green">
+                </div>
+                <div>
+                    <h2 id="tip-modal-title" class="text-3xl font-bold"></h2>
+                    <p class="text-agri-green font-bold text-sm uppercase tracking-wider mt-1">Farming Guide</p>
+                </div>
+            </div>
+            <div class="prose dark:prose-invert max-w-none">
+                <p id="tip-modal-content" class="text-stone-600 dark:text-stone-400 text-lg leading-relaxed"></p>
+            </div>
+            <div class="mt-12 flex justify-end">
+                <button onclick="closeTipModal()"
+                    class="bg-stone-900 dark:bg-white text-white dark:text-stone-900 px-8 py-3 rounded-xl font-bold">
+                    Got it, Thanks!
+                </button>
             </div>
         </div>
     </div>
@@ -330,6 +511,71 @@
                         <i data-lucide="message-circle" class="w-6 h-6"></i>
                         Contact on WhatsApp
                     </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Farming Tips Section -->
+    <section id="farming-tips"
+        class="py-24 overflow-hidden border-t border-stone-100 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                <div class="max-w-2xl">
+                    <h2 class="text-4xl font-bold mb-4">Modern <span class="text-agri-green">Farming Tips</span></h2>
+                    <p class="text-stone-500 dark:text-stone-400">Expert advice to help you maximize your harvest and
+                        maintain a sustainable farm. Updated weekly by our agronomists.</p>
+                </div>
+                <button
+                    class="bg-stone-100 dark:bg-stone-800 px-6 py-3 rounded-xl font-bold hover:bg-agri-green hover:text-white transition-all">View
+                    All Tips</button>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- TipCard 1 -->
+                <div onclick="openTipModal(1)"
+                    class="group bg-white dark:bg-stone-900 p-8 rounded-[2.5rem] border border-stone-100 dark:border-stone-800 hover:border-agri-green transition-all duration-500 shadow-xl shadow-stone-200/50 dark:shadow-none cursor-pointer">
+                    <div
+                        class="w-14 h-14 bg-agri-light dark:bg-agri-green/20 rounded-2xl flex items-center justify-center text-agri-green mb-8 group-hover:scale-110 transition-transform">
+                        <i data-lucide="cloud-rain" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 group-hover:text-agri-green transition-colors">Smart Irrigation
+                    </h3>
+                    <p class="text-stone-500 dark:text-stone-400 leading-relaxed mb-6">Learn how to optimize water usage
+                        using capillary sensors and automated drip systems for efficient growth.</p>
+                    <button class="inline-flex items-center gap-2 text-agri-green font-bold group">Read More <i
+                            data-lucide="chevron-right"
+                            class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i></button>
+                </div>
+                <!-- TipCard 2 -->
+                <div onclick="openTipModal(2)"
+                    class="group bg-white dark:bg-stone-900 p-8 rounded-[2.5rem] border border-stone-100 dark:border-stone-800 hover:border-agri-green transition-all duration-500 shadow-xl shadow-stone-200/50 dark:shadow-none cursor-pointer">
+                    <div
+                        class="w-14 h-14 bg-agri-light dark:bg-agri-green/20 rounded-2xl flex items-center justify-center text-agri-green mb-8 group-hover:scale-110 transition-transform">
+                        <i data-lucide="bug" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 group-hover:text-agri-green transition-colors">Organic Pest
+                        Control</h3>
+                    <p class="text-stone-500 dark:text-stone-400 leading-relaxed mb-6">Discover natural remedies and
+                        companion planting techniques to keep your crops safe without harsh chemicals.</p>
+                    <button class="inline-flex items-center gap-2 text-agri-green font-bold group">Read More <i
+                            data-lucide="chevron-right"
+                            class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i></button>
+                </div>
+                <!-- TipCard 3 -->
+                <div onclick="openTipModal(3)"
+                    class="group bg-white dark:bg-stone-900 p-8 rounded-[2.5rem] border border-stone-100 dark:border-stone-800 hover:border-agri-green transition-all duration-500 shadow-xl shadow-stone-200/50 dark:shadow-none cursor-pointer">
+                    <div
+                        class="w-14 h-14 bg-agri-light dark:bg-agri-green/20 rounded-2xl flex items-center justify-center text-agri-green mb-8 group-hover:scale-110 transition-transform">
+                        <i data-lucide="test-tube" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 group-hover:text-agri-green transition-colors">Soil Health 101
+                    </h3>
+                    <p class="text-stone-500 dark:text-stone-400 leading-relaxed mb-6">A guide to testing soil pH and
+                        replenishing essential nutrients like Nitrogen, Phosphorus, and Potassium.</p>
+                    <button class="inline-flex items-center gap-2 text-agri-green font-bold group">Read More <i
+                            data-lucide="chevron-right"
+                            class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i></button>
                 </div>
             </div>
         </div>
@@ -387,7 +633,10 @@
                 category: "Seeds",
                 price: 150,
                 image: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?auto=format&fit=crop&q=80&w=800",
-                description: "Vibrant and healthy organic tomato seeds, specifically bred for high yield and excellent disease resistance. Perfect for both garden beds and larger farming plots."
+                description: "Vibrant and healthy organic tomato seeds, specifically bred for high yield and excellent disease resistance. Perfect for both garden beds and larger farming plots.",
+                specs: { weight: "10g", brand: "AgriSeeds", usage: "Sunlight: 6-8 hrs" },
+                rating: 4.5,
+                reviews: 89
             },
             {
                 id: 2,
@@ -395,7 +644,10 @@
                 category: "Fertilizer",
                 price: 450,
                 image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&q=80&w=800",
-                description: "Our signature blend of peat, compost, and essential minerals. This premium soil mix provides the perfect foundation for strong root development and nutrient uptake."
+                description: "Our signature blend of peat, compost, and essential minerals. This premium soil mix provides the perfect foundation for strong root development and nutrient uptake.",
+                specs: { weight: "5kg", brand: "BhoomiPlus", usage: "All Plants" },
+                rating: 4.9,
+                reviews: 245
             },
             {
                 id: 3,
@@ -403,7 +655,10 @@
                 category: "Tools",
                 price: 299,
                 image: "https://images.unsplash.com/photo-1416872928419-dc4206935551?auto=format&fit=crop&q=80&w=800",
-                description: "Professional grade stainless steel trowel. Features an ergonomic hardwood handle and measurement markings for precise planting depth."
+                description: "Professional grade stainless steel trowel. Features an ergonomic hardwood handle and measurement markings for precise planting depth.",
+                specs: { weight: "300g", brand: "IronHand", usage: "Digging/Planting" },
+                rating: 4.7,
+                reviews: 56
             },
             {
                 id: 4,
@@ -411,7 +666,10 @@
                 category: "Fertilizer",
                 price: 899,
                 image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&q=80&w=800",
-                description: "A fast-acting, organic liquid fertilizer rich in nitrogen. Ideal for leafy greens and vegetables during their peak growth stages."
+                description: "A fast-acting, organic liquid fertilizer rich in nitrogen. Ideal for leafy greens and vegetables during their peak growth stages.",
+                specs: { weight: "1L", brand: "GreenNitro", usage: "Liquid Application" },
+                rating: 4.6,
+                reviews: 112
             },
             {
                 id: 5,
@@ -419,7 +677,10 @@
                 category: "Seeds",
                 price: 120,
                 image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&q=80&w=800",
-                description: "Highly aromatic Genovese basil seeds. Easy to germinate and grows vigorously in sunlight. Perfect for culinary enthusiasts."
+                description: "Highly aromatic Genovese basil seeds. Easy to germinate and grows vigorously in sunlight. Perfect for culinary enthusiasts.",
+                specs: { weight: "5g", brand: "AgriSeeds", usage: "Sunlight: 6 hrs" },
+                rating: 4.8,
+                reviews: 67
             },
             {
                 id: 6,
@@ -427,7 +688,34 @@
                 category: "Tools",
                 price: 550,
                 image: "https://images.unsplash.com/photo-1536069221282-d877868cad6b?auto=format&fit=crop&q=80&w=800",
-                description: "Balanced design with a long reach spout. Includes a brass rose head for gentle watering of small seedlings and delicate plants."
+                description: "Balanced design with a long reach spout. Includes a brass rose head for gentle watering of small seedlings and delicate plants.",
+                specs: { weight: "500g", brand: "EcoGrow", usage: "Outdoor/Indoor" },
+                rating: 4.8,
+                reviews: 124
+            }
+        ];
+
+        const farmingTips = [
+            {
+                id: 1,
+                title: "Smart Irrigation",
+                icon: "cloud-rain",
+                short: "Learn how to optimize water usage using capillary sensors and automated drip systems.",
+                content: "Smart irrigation systems use technology to monitor soil moisture and weather conditions. By installing capillary sensors, you can ensure your plants receive exactly the amount of water they need, reducing waste and improving crop health. Drip systems deliver water directly to the roots, minimizing evaporation."
+            },
+            {
+                id: 2,
+                title: "Organic Pest Control",
+                icon: "bug",
+                short: "Discover natural remedies and companion planting techniques to keep your crops safe.",
+                content: "Organic pest control focuses on natural solutions like neem oil, garlic sprays, and introducing beneficial insects like ladybugs. Companion planting—growing certain plants together (like marigolds with tomatoes)—can naturally repel pests without the need for synthetic chemicals."
+            },
+            {
+                id: 3,
+                title: "Soil Health 101",
+                icon: "test-tube",
+                short: "A guide to testing soil pH and replenishing essential nutrients like Nitrogen and Phosphorus.",
+                content: "Healthy soil is the foundation of a good harvest. Regular pH testing helps you understand which nutrients are missing. Replenishing soil with organic compost, manure, or specific organic fertilizers ensures that Nitrogen, Phosphorus, and Potassium levels remain optimal for plant growth."
             }
         ];
 
@@ -435,14 +723,115 @@
         let cart = JSON.parse(localStorage.getItem('agri_cart')) || [];
         let currentCategory = 'All';
         let isDarkMode = localStorage.getItem('agri_theme') === 'dark';
+        let currentUser = JSON.parse(localStorage.getItem('agri_current_user')) || null;
+        let users = JSON.parse(localStorage.getItem('agri_users')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('agri_wishlist')) || [];
+        let orders = JSON.parse(localStorage.getItem('agri_orders')) || [];
+        let appliedDiscount = 0;
 
         // Init
         window.onload = () => {
             applyInitialTheme();
             updateCartUI();
+            updateAuthUI();
             renderProducts(products);
             lucide.createIcons();
         };
+
+        // Auth Logic
+        function openAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            document.body.classList.add('cart-open');
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+            document.body.classList.remove('cart-open');
+        }
+
+        function toggleAuthMode(mode) {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            if (mode === 'signup') {
+                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
+            } else {
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+            }
+        }
+
+        function handleSignup() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            if (!name || !email || !password) {
+                showToast("Please fill all fields", true);
+                return;
+            }
+
+            if (users.find(u => u.email === email)) {
+                showToast("Email already exists", true);
+                return;
+            }
+
+            const newUser = { name, email, password, id: Date.now() };
+            users.push(newUser);
+            localStorage.setItem('agri_users', JSON.stringify(users));
+
+            currentUser = newUser;
+            localStorage.setItem('agri_current_user', JSON.stringify(currentUser));
+
+            updateAuthUI();
+            closeAuthModal();
+            showToast(`Welcome, ${name}!`);
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('agri_current_user', JSON.stringify(currentUser));
+                updateAuthUI();
+                closeAuthModal();
+                showToast(`Welcome back, ${user.name}!`);
+            } else {
+                showToast("Invalid credentials", true);
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('agri_current_user');
+            updateAuthUI();
+            showToast("Logged out successfully");
+        }
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('login-btn');
+            const userProfile = document.getElementById('user-profile');
+            const avatarChar = document.getElementById('user-avatar-char');
+            const nameDisplay = document.getElementById('user-name-display');
+
+            if (currentUser) {
+                loginBtn.classList.add('hidden');
+                userProfile.classList.remove('hidden');
+                avatarChar.innerText = currentUser.name.charAt(0).toUpperCase();
+                nameDisplay.innerText = currentUser.name;
+            } else {
+                loginBtn.classList.remove('hidden');
+                userProfile.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
 
         // Theme
         function toggleDarkMode() {
@@ -463,6 +852,79 @@
             const icon = document.getElementById('dark-mode-icon');
             icon.setAttribute('data-lucide', isDarkMode ? 'sun' : 'moon');
             lucide.createIcons();
+        }
+
+        // Wishlist & Orders Modals (Simulated)
+        function openWishlistModal() {
+            showToast("Wishlist features coming in next update!", false);
+        }
+
+        function openOrdersModal() {
+            showToast("Order history feature coming in next update!", false);
+        }
+
+        function toggleWishlist(productId) {
+            const index = wishlist.indexOf(productId);
+            if (index > -1) {
+                wishlist.splice(index, 1);
+                showToast("Removed from wishlist");
+            } else {
+                wishlist.push(productId);
+                showToast("Added to wishlist");
+            }
+            localStorage.setItem('agri_wishlist', JSON.stringify(wishlist));
+            renderProducts(products);
+        }
+
+        // Coupon Logic
+        function applyCoupon() {
+            const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+            const msgEl = document.getElementById('coupon-msg');
+
+            if (code === 'AGRI10') {
+                appliedDiscount = 10;
+                msgEl.innerText = "Coupon AGRI10 applied! 10% discount added.";
+                msgEl.className = "text-xs mb-4 text-agri-green block";
+            } else if (code === 'SUMMER20') {
+                appliedDiscount = 20;
+                msgEl.innerText = "Coupon SUMMER20 applied! 20% discount added.";
+                msgEl.className = "text-xs mb-4 text-agri-green block";
+            } else {
+                appliedDiscount = 0;
+                msgEl.innerText = "Invalid coupon code";
+                msgEl.className = "text-xs mb-4 text-red-500 block";
+            }
+            updateCheckoutTotal();
+        }
+
+        function updateCheckoutTotal() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const discountAmount = (subtotal * appliedDiscount) / 100;
+            const finalTotal = subtotal - discountAmount;
+            document.getElementById('checkout-total').innerText = `₹${finalTotal}`;
+        }
+
+        // Farming Tips Logic
+        function openTipModal(tipId) {
+            const tip = farmingTips.find(t => t.id === tipId);
+            if (!tip) return;
+
+            document.getElementById('tip-modal-title').innerText = tip.title;
+            document.getElementById('tip-modal-content').innerText = tip.content;
+            document.getElementById('tip-modal-icon').innerHTML = `<i data-lucide="${tip.icon}" class="w-10 h-10"></i>`;
+
+            const modal = document.getElementById('tip-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            document.body.classList.add('cart-open');
+            lucide.createIcons();
+        }
+
+        function closeTipModal() {
+            const modal = document.getElementById('tip-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+            document.body.classList.remove('cart-open');
         }
 
         // Filtering
@@ -507,12 +969,19 @@
                 card.className = `bg-white dark:bg-stone-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-stone-100 dark:border-stone-700 group cursor-pointer animate-fade-in-up`;
                 card.style.animationDelay = `${idx * 0.1}s`;
                 card.onclick = () => openModal(p);
+
+                const isInWishlist = wishlist.find(id => id === p.id);
+
                 card.innerHTML = `
                     <div class="relative h-72 overflow-hidden">
                         <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         <div class="absolute top-4 left-4 bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-stone-800 dark:text-stone-200 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
                             ${p.category}
                         </div>
+                        <button onclick="event.stopPropagation(); toggleWishlist(${p.id})" 
+                            class="absolute top-4 right-4 p-2 bg-white/90 dark:bg-stone-900/90 backdrop-blur-md rounded-full shadow-sm hover:scale-110 transition-all ${isInWishlist ? 'text-red-500' : 'text-stone-400'}">
+                            <i data-lucide="heart" class="w-5 h-5 ${isInWishlist ? 'fill-current' : ''}"></i>
+                        </button>
                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                              <button onclick="event.stopPropagation(); buyNow(${p.id})" class="bg-white text-stone-900 px-4 py-2 rounded-lg font-bold text-sm hover:bg-agri-green hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300">
                                 Buy Now
@@ -542,6 +1011,12 @@
             document.getElementById('modal-desc').innerText = p.description;
             document.getElementById('modal-price').innerText = `₹${p.price}`;
             document.getElementById('modal-category').innerText = p.category;
+
+            // Rating and Specs
+            document.getElementById('modal-rating').innerText = `${p.rating} (${p.reviews} reviews)`;
+            document.getElementById('spec-weight').innerText = p.specs.weight;
+            document.getElementById('spec-brand').innerText = p.specs.brand;
+            document.getElementById('spec-usage').innerText = p.specs.usage;
 
             const addBtn = document.getElementById('modal-add-btn');
             addBtn.onclick = () => {
@@ -739,8 +1214,15 @@
                 orderDetails += `- ${item.name} (x${item.quantity}) - ₹${item.price * item.quantity}\n`;
             });
 
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            orderDetails += `\n*💰 Total Amount:* ₹${total}`;
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const discountAmount = (subtotal * appliedDiscount) / 100;
+            const finalTotal = subtotal - discountAmount;
+
+            if (appliedDiscount > 0) {
+                orderDetails += `\n*💰 Subtotal:* ₹${subtotal}`;
+                orderDetails += `\n*🎁 Discount (${appliedDiscount}%):* -₹${discountAmount}`;
+            }
+            orderDetails += `\n*✅ Final Total:* ₹${finalTotal}`;
 
             const url = `https://wa.me/916360760312?text=${encodeURIComponent(orderDetails)}`;
             window.open(url, '_blank');
