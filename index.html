@@ -81,22 +81,11 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <!-- Language Switcher -->
-                    <div class="relative group">
-                        <button
-                            class="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors text-stone-600 dark:text-stone-400 flex items-center gap-1">
-                            <i data-lucide="languages" class="w-6 h-6"></i>
-                            <span class="text-xs font-bold uppercase" id="current-lang-text">EN</span>
-                        </button>
-                        <div
-                            class="absolute right-0 mt-2 w-32 bg-white dark:bg-stone-900 border border-stone-100 dark:border-stone-800 rounded-2xl shadow-xl py-2 hidden group-hover:block animate-fade-in-up">
-                            <button onclick="updateLanguage('en')"
-                                class="w-full text-left px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-800 text-sm font-medium">English</button>
-                            <button onclick="updateLanguage('kn')"
-                                class="w-full text-left px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-800 text-sm font-medium">ಕನ್ನಡ</button>
-                        </div>
-                    </div>
-
+                    <button onclick="toggleLanguage()"
+                        class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-stone-200 dark:border-stone-700 hover:border-agri-green dark:hover:border-agri-green transition-all text-sm font-semibold">
+                        <i data-lucide="languages" class="w-4 h-4 text-agri-green"></i>
+                        <span id="lang-btn-text">KN</span>
+                    </button>
                     <button onclick="toggleDarkMode()"
                         class="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors text-stone-600 dark:text-stone-400">
                         <i data-lucide="moon" id="dark-mode-icon" class="w-6 h-6"></i>
@@ -107,46 +96,6 @@
                         <span id="cart-badge"
                             class="hidden absolute -top-1 -right-1 bg-agri-accent text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm">0</span>
                     </button>
-
-                    <!-- User Profile Section -->
-                    <div id="user-section"
-                        class="flex items-center gap-2 border-l border-stone-200 dark:border-stone-800 pl-4 ml-2">
-                        <button id="login-btn" onclick="openAuthModal()" data-i18n="login"
-                            class="bg-agri-green text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-agri-dark transition-all">
-                            Login
-                        </button>
-                        <div id="user-profile" class="hidden relative group">
-                            <button
-                                class="flex items-center gap-2 p-1 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 transition-all">
-                                <div class="w-8 h-8 rounded-full bg-agri-green flex items-center justify-center text-white font-bold text-sm"
-                                    id="user-avatar-char">
-                                    U
-                                </div>
-                                <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400"></i>
-                            </button>
-                            <div
-                                class="absolute right-0 mt-2 w-48 bg-white dark:bg-stone-900 border border-stone-100 dark:border-stone-800 rounded-2xl shadow-xl py-2 hidden group-hover:block animate-fade-in-up">
-                                <div class="px-4 py-2 border-b border-stone-100 dark:border-stone-800 mb-1">
-                                    <p class="text-xs text-stone-500" data-i18n="welcome">Welcome,</p>
-                                    <p class="font-bold truncate" id="user-name-display">User</p>
-                                </div>
-                                <button onclick="openOrdersModal()"
-                                    class="w-full text-left px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-800 text-sm flex items-center gap-2">
-                                    <i data-lucide="package" class="w-4 h-4"></i> <span data-i18n="my_orders">My
-                                        Orders</span>
-                                </button>
-                                <button onclick="openWishlistModal()"
-                                    class="w-full text-left px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-800 text-sm flex items-center gap-2">
-                                    <i data-lucide="heart" class="w-4 h-4"></i> <span
-                                        data-i18n="wishlist">Wishlist</span>
-                                </button>
-                                <button onclick="handleLogout()"
-                                    class="w-full text-left px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-800 text-sm flex items-center gap-2 text-red-500">
-                                    <i data-lucide="log-out" class="w-4 h-4"></i> <span data-i18n="logout">Logout</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -160,7 +109,7 @@
         class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white dark:bg-stone-900 shadow-2xl z-[70] transform translate-x-full">
         <div class="flex flex-col h-full">
             <div class="p-6 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center">
-                <h2 class="text-xl font-bold" data-i18n="cart">Your Cart</h2>
+                <h2 class="text-xl font-bold">Your Cart</h2>
                 <button onclick="toggleCart()" class="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
@@ -169,15 +118,15 @@
                 <!-- Cart items injected here -->
                 <div id="empty-cart-msg" class="text-center py-12 text-stone-500">
                     <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-4 opacity-20"></i>
-                    <p data-i18n="empty_cart">Your cart is empty</p>
+                    <p>Your cart is empty</p>
                 </div>
             </div>
             <div class="p-6 border-t border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900/50">
                 <div class="flex justify-between items-center mb-4">
-                    <span class="text-stone-500" data-i18n="subtotal">Subtotal</span>
+                    <span class="text-stone-500">Subtotal</span>
                     <span id="cart-total" class="text-2xl font-bold text-agri-green">₹0</span>
                 </div>
-                <button onclick="checkout()" data-i18n="checkout"
+                <button onclick="checkout()"
                     class="w-full bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">
                     Proceed to Checkout
                 </button>
@@ -200,33 +149,31 @@
                                 class="animate-ping absolute inline-flex h-full w-full rounded-full bg-agri-green opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-agri-green"></span>
                         </span>
-                        <span data-i18n="hero_badge">New Harvest Season 2026</span>
+                        New Harvest Season 2026
                     </div>
-                    <h1 class="text-5xl lg:text-6xl font-bold text-stone-900 dark:text-white tracking-tight mb-6"
-                        data-i18n="hero_title">
+                    <h1 class="text-5xl lg:text-6xl font-bold text-stone-900 dark:text-white tracking-tight mb-6">
                         Cultivate abundance with <span class="text-agri-green">premium inputs</span>
                     </h1>
-                    <p class="text-xl text-stone-600 dark:text-stone-400 mb-8 leading-relaxed max-w-2xl"
-                        data-i18n="hero_sub">
+                    <p class="text-xl text-stone-600 dark:text-stone-400 mb-8 leading-relaxed max-w-2xl">
                         Source high-quality seeds, fertilizers, and tools. Bringing modern agricultural solutions to
                         your doorstep.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <a href="#products" data-i18n="shop_now"
+                        <a href="#products"
                             class="inline-flex items-center justify-center gap-2 bg-agri-green text-white px-8 py-3 rounded-xl font-semibold hover:bg-agri-dark transition-all shadow-lg shadow-agri-green/20">
                             Shop Now <i data-lucide="arrow-right" class="w-5 h-5"></i>
                         </a>
-                        <button data-i18n="learn_growing"
+                        <button
                             class="inline-flex items-center justify-center gap-2 bg-white dark:bg-stone-800 text-stone-900 dark:text-white border border-stone-200 dark:border-stone-700 px-8 py-3 rounded-xl font-semibold hover:bg-stone-50 dark:hover:bg-stone-700 transition-all">
-                            Learn Growing <i data-lucide="sprout" class="w-5 h-5"></i>
+                            <i data-lucide="sprout" class="w-5 h-5"></i> Learn Growing
                         </button>
                     </div>
                 </div>
                 <div
                     class="hidden lg:block relative mt-12 lg:mt-0 opacity-0 animate-[fadeInUp_0.8s_ease-out_0.2s_forwards]">
                     <div class="absolute inset-0 bg-agri-green rounded-3xl rotate-3 opacity-20 blur-xl"></div>
-                    <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1000"
-                        alt="Modern Agriculture Field"
+                    <img src="https://images.unsplash.com/photo-1625246333195-bf436c92aa7f?auto=format&fit=crop&q=80&w=1000"
+                        alt="Agriculture"
                         class="relative rounded-3xl shadow-2xl rotate-3 hover:rotate-0 transition-all duration-700" />
                 </div>
             </div>
@@ -240,18 +187,17 @@
             <div class="flex flex-col lg:flex-row gap-6 justify-between items-center">
                 <div class="relative w-full lg:w-96">
                     <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400"></i>
-                    <input type="text" id="search-input" oninput="handleFilter()" data-i18n="search_placeholder"
-                        placeholder="Search products..."
+                    <input type="text" id="search-input" oninput="handleFilter()" placeholder="Search products..."
                         class="w-full pl-10 pr-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none transition-all">
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
-                    <button onclick="setCategory('All')" data-i18n="cat_all" data-category="All"
+                    <button onclick="setCategory('All')"
                         class="category-btn active px-4 py-2 rounded-lg text-sm font-medium transition-all border border-transparent bg-agri-green text-white">All</button>
-                    <button onclick="setCategory('Seeds')" data-i18n="cat_seeds" data-category="Seeds"
+                    <button onclick="setCategory('Seeds')"
                         class="category-btn px-4 py-2 rounded-lg text-sm font-medium transition-all border border-stone-200 dark:border-stone-700 hover:border-agri-green">Seeds</button>
-                    <button onclick="setCategory('Fertilizer')" data-i18n="cat_fertilizer" data-category="Fertilizer"
+                    <button onclick="setCategory('Fertilizer')"
                         class="category-btn px-4 py-2 rounded-lg text-sm font-medium transition-all border border-stone-200 dark:border-stone-700 hover:border-agri-green">Fertilizer</button>
-                    <button onclick="setCategory('Tools')" data-i18n="cat_tools" data-category="Tools"
+                    <button onclick="setCategory('Tools')"
                         class="category-btn px-4 py-2 rounded-lg text-sm font-medium transition-all border border-stone-200 dark:border-stone-700 hover:border-agri-green">Tools</button>
                 </div>
             </div>
@@ -288,1179 +234,610 @@
                 <div class="p-8 lg:p-12 flex flex-col justify-center">
                     <span id="modal-category"
                         class="bg-agri-light/50 dark:bg-agri-green/20 text-agri-dark dark:text-agri-light text-xs font-bold px-3 py-1 rounded-full w-fit mb-4"></span>
-                    <div class="flex items-center gap-2 mb-4">
-                        <div class="flex text-agri-accent">
-                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                        </div>
-                        <span id="modal-rating" class="text-xs text-stone-500 font-medium"></span>
-                    </div>
                     <h2 id="modal-name" class="text-3xl font-bold mb-4"></h2>
-                    <p id="modal-desc" class="text-stone-600 dark:text-stone-400 mb-6 leading-relaxed"></p>
-
-                    <div class="grid grid-cols-3 gap-4 mb-8 pt-6 border-t border-stone-100 dark:border-stone-800">
-                        <div class="text-center">
-                            <p class="text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-1"
-                                data-i18n="spec_weight">Weight</p>
-                            <p id="spec-weight" class="text-sm font-bold"></p>
-                        </div>
-                        <div class="text-center border-x border-stone-100 dark:border-stone-800">
-                            <p class="text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-1"
-                                data-i18n="spec_brand">Brand</p>
-                            <p id="spec-brand" class="text-sm font-bold"></p>
-                        </div>
-                        <div class="text-center">
-                            <p class="text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-1"
-                                data-i18n="spec_usage">Usage</p>
-                            <p id="spec-usage" class="text-sm font-bold"></p>
-                        </div>
-                    </div>
-
+                    <p id="modal-desc" class="text-stone-600 dark:text-stone-400 mb-8 leading-relaxed"></p>
                     <div
                         class="flex items-center justify-between mt-auto pt-6 border-t border-stone-100 dark:border-stone-800">
                         <span id="modal-price" class="text-3xl font-bold text-agri-green"></span>
-                        <div class="flex items-center gap-3">
-                            <button id="modal-add-btn" data-i18n="add_to_cart"
-                                class="bg-agri-green hover:bg-agri-dark text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-agri-green/20">
-                                Add to Cart
-                            </button>
-                        </div>
+                        <button id="modal-add-btn"
+                            class="bg-agri-green hover:bg-agri-dark text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-agri-green/20">
+                            Add to Cart
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Checkout Modal -->
-            <div id="checkout-modal" onclick="closeCheckout()"
-                class="fixed inset-0 bg-stone-900/80 backdrop-blur-md z-[90] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
-                <div onclick="event.stopPropagation()"
-                    class="bg-white dark:bg-stone-900 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl relative p-8">
-                    <button onclick="closeCheckout()"
-                        class="absolute top-4 right-4 p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors">
-                        <i data-lucide="x" class="w-6 h-6"></i>
-                    </button>
-                    <h2 class="text-2xl font-bold mb-6">Complete Your Order</h2>
-                    <div class="p-6 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center">
-                        <h2 class="text-xl font-bold" data-i18n="checkout_title">Checkout</h2>
-                        <button onclick="closeCheckout()"
-                            class="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full">
-                            <i data-lucide="x" class="w-6 h-6"></i>
-                        </button>
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" onclick="closeCheckout()"
+        class="fixed inset-0 bg-stone-900/80 backdrop-blur-md z-[90] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div onclick="event.stopPropagation()"
+            class="bg-white dark:bg-stone-900 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl relative p-8">
+            <button onclick="closeCheckout()"
+                class="absolute top-4 right-4 p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h2 class="text-2xl font-bold mb-6">Complete Your Order</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Full Name</label>
+                    <input type="text" id="checkout-name"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                        placeholder="Enter your name">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Phone Number</label>
+                    <input type="tel" id="checkout-phone"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                        placeholder="e.g. +91 9876543210">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Delivery Address</label>
+                    <textarea id="checkout-address" rows="3"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                        placeholder="Street, City, Pincode"></textarea>
+                </div>
+                <div class="pt-4 border-t border-stone-100 dark:border-stone-800">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-stone-500 font-medium">Grand Total</span>
+                        <span id="checkout-total" class="text-2xl font-bold text-agri-green">₹0</span>
                     </div>
-                    <div class="p-6 space-y-4">
+                    <button onclick="confirmOrder()"
+                        class="w-full bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">
+                        Confirm & Order via WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section class="py-24 bg-stone-100 dark:bg-stone-900/30">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold text-stone-900 dark:text-white mb-6">Expert Farming Advice</h2>
+            <p class="text-lg text-stone-500 dark:text-stone-400 mb-12">Connect with our agricultural specialists on
+                WhatsApp for personalized recommendations and bulk orders.</p>
+
+            <div
+                class="bg-white dark:bg-stone-800 p-8 lg:p-10 rounded-[2rem] shadow-xl shadow-stone-200/50 dark:shadow-none border border-stone-200 dark:border-stone-700">
+                <div class="space-y-6 text-left">
+                    <div class="grid sm:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-semibold mb-1" data-i18n="full_name">Full Name</label>
-                            <input type="text" id="checkout-name"
-                                class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
+                            <label for="name"
+                                class="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">Full
+                                Name</label>
+                            <input type="text" id="name"
+                                class="w-full px-5 py-3 rounded-xl border border-stone-200 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 focus:ring-2 focus:ring-agri-green outline-none transition-all"
                                 placeholder="Enter your name">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-1" data-i18n="phone">Phone Number</label>
-                            <input type="tel" id="checkout-phone"
-                                class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
-                                placeholder="e.g. +91 9876543210">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold mb-1" data-i18n="address">Delivery Address</label>
-                            <textarea id="checkout-address" rows="3"
-                                class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
-                                placeholder="Street, City, Pincode"></textarea>
-                        </div>
-                        <div class="pt-4 border-t border-stone-100 dark:border-stone-800">
-                            <label class="block text-sm font-semibold mb-2" data-i18n="coupon">Discount Coupon</label>
-                            <div class="flex gap-2 mb-4">
-                                <input type="text" id="coupon-input"
-                                    class="flex-1 px-4 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none uppercase text-sm"
-                                    placeholder="Enter Code (e.g. AGRI10)">
-                                <button onclick="applyCoupon()" data-i18n="apply"
-                                    class="bg-stone-900 dark:bg-white text-white dark:text-stone-900 px-4 py-2 rounded-xl text-sm font-bold">
-                                    Apply
-                                </button>
-                            </div>
-                            <div id="coupon-msg" class="text-xs mb-4 hidden"></div>
-                        </div>
-                        <div class="pt-4 border-t border-stone-100 dark:border-stone-800">
-                            <div class="flex justify-between items-center mb-6">
-                                <span class="text-stone-500 font-medium" data-i18n="grand_total">Grand Total</span>
-                                <span id="checkout-total" class="text-2xl font-bold text-agri-green">₹0</span>
-                            </div>
-                            <button onclick="confirmOrder()" data-i18n="confirm_order"
-                                class="w-full bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">
-                                Confirm & Order via WhatsApp
-                            </button>
+                            <label for="subject"
+                                class="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">Subject</label>
+                            <select id="subject"
+                                class="w-full px-5 py-3 rounded-xl border border-stone-200 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 focus:ring-2 focus:ring-agri-green outline-none transition-all">
+                                <option>Product Inquiry</option>
+                                <option>Bulk Order</option>
+                                <option>Farming Advice</option>
+                                <option>Other</option>
+                            </select>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Auth Modal -->
-            <div id="auth-modal" onclick="closeAuthModal()"
-                class="fixed inset-0 bg-stone-900/80 backdrop-blur-md z-[100] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
-                <div onclick="event.stopPropagation()"
-                    class="bg-white dark:bg-stone-900 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl relative p-8">
-                    <button onclick="closeAuthModal()"
-                        class="absolute top-4 right-4 p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors">
-                        <i data-lucide="x" class="w-6 h-6"></i>
+                    <div>
+                        <label for="message"
+                            class="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">Message</label>
+                        <textarea id="message" rows="4"
+                            class="w-full px-5 py-3 rounded-xl border border-stone-200 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 focus:ring-2 focus:ring-agri-green outline-none transition-all"
+                            placeholder="How can we help you?"></textarea>
+                    </div>
+                    <button onclick="sendToWhatsApp()"
+                        class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-3 shadow-lg shadow-green-500/20">
+                        <i data-lucide="message-circle" class="w-6 h-6"></i>
+                        Contact on WhatsApp
                     </button>
-
-                    <div id="login-form">
-                        <h2 class="text-3xl font-bold mb-2" data-i18n="welcome_back">Welcome Back</h2>
-                        <p class="text-stone-500 mb-8" data-i18n="login_sub">Login to manage your orders</p>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-1" data-i18n="email">Email Address</label>
-                                <input type="email" id="login-email"
-                                    class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
-                                    placeholder="name@example.com">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-1" data-i18n="password">Password</label>
-                                <input type="password" id="login-password"
-                                    class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
-                                    placeholder="••••••••">
-                            </div>
-                            <button onclick="handleLogin()" data-i18n="login"
-                                class="w-full bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">
-                                Login
-                            </button>
-                            <p class="text-center text-sm text-stone-500">
-                                <span data-i18n="no_account">Don't have an account?</span>
-                                <button onclick="toggleAuthMode('signup')" class="text-agri-green font-bold"
-                                    data-i18n="signup_btn">Sign Up</button>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div id="signup-form" class="hidden">
-                        <h2 class="text-3xl font-bold mb-2" data-i18n="join_agri">Join AgriStore</h2>
-                        <p class="text-stone-500 mb-8" data-i18n="signup_sub">Start your modern farming journey</p>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-1" data-i18n="full_name">Full Name</label>
-                                <input type="text" id="signup-name"
-                                    class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
-                                    placeholder="Your Name">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-1" data-i18n="email">Email Address</label>
-                                <input type="email" id="signup-email"
-                                    class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
-                                    placeholder="name@example.com">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-1" data-i18n="password">Password</label>
-                                <input type="password" id="signup-password"
-                                    class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
-                                    placeholder="••••••••">
-                            </div>
-                            <button onclick="handleSignup()" data-i18n="create_acc"
-                                class="w-full bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">
-                                Create Account
-                            </button>
-                            <p class="text-center text-sm text-stone-500">
-                                <span data-i18n="already_acc">Already have an account?</span>
-                                <button onclick="toggleAuthMode('login')" class="text-agri-green font-bold"
-                                    data-i18n="login">Login</button>
-                            </p>
-                        </div>
-                    </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Tip Modal -->
-            <div id="tip-modal" onclick="closeTipModal()"
-                class="fixed inset-0 bg-stone-900/80 backdrop-blur-md z-[100] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
-                <div onclick="event.stopPropagation()"
-                    class="bg-white dark:bg-stone-900 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl relative p-8">
-                    <button onclick="closeTipModal()"
-                        class="absolute top-4 right-4 p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors">
-                        <i data-lucide="x" class="w-6 h-6"></i>
-                    </button>
-                    <div class="flex items-center gap-6 mb-8">
-                        <div id="tip-modal-icon"
-                            class="w-20 h-20 bg-agri-light dark:bg-agri-green/20 rounded-2xl flex items-center justify-center text-agri-green">
+    <!-- Footer -->
+    <footer class="bg-stone-900 dark:bg-black text-white py-16 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-12 mb-12">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-agri-green p-2 rounded-lg text-white">
+                            <i data-lucide="leaf" class="w-6 h-6"></i>
                         </div>
-                        <div>
-                            <h2 id="tip-modal-title" class="text-3xl font-bold"></h2>
-                            <p class="text-agri-green font-bold text-sm uppercase tracking-wider mt-1"
-                                data-i18n="guide">Farming Guide</p>
-                        </div>
+                        <span class="text-2xl font-bold">AgriStore</span>
                     </div>
-                    <div class="prose dark:prose-invert max-w-none">
-                        <p id="tip-modal-content" class="text-stone-600 dark:text-stone-400 text-lg leading-relaxed">
-                        </p>
-                    </div>
-                    <div class="mt-12 flex justify-end">
-                        <button onclick="closeTipModal()" data-i18n="got_it"
-                            class="bg-stone-900 dark:bg-white text-white dark:text-stone-900 px-8 py-3 rounded-xl font-bold">
-                            Got it, Thanks!
-                        </button>
-                    </div>
+                    <p class="text-stone-400">Leading provider of premium agricultural inputs and modern farming
+                        solutions.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-6">Quick Links</h3>
+                    <ul class="space-y-3 text-stone-400">
+                        <li><a href="#" class="hover:text-agri-green transition-colors">Products</a></li>
+                        <li><a href="#" class="hover:text-agri-green transition-colors">Bulk Orders</a></li>
+                        <li><a href="#" class="hover:text-agri-green transition-colors">Farming Tips</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-6">Contact</h3>
+                    <ul class="space-y-3 text-stone-400">
+                        <li>Email: support@agristore.com</li>
+                        <li>Phone: +91 63607 60312</li>
+                    </ul>
                 </div>
             </div>
-
-            <!-- Contact Section -->
-            <section class="py-24 bg-stone-100 dark:bg-stone-900/30">
-                <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 class="text-4xl font-bold text-stone-900 dark:text-white mb-6">Expert Farming Advice</h2>
-                    <p class="text-lg text-stone-500 dark:text-stone-400 mb-12">Connect with our agricultural
-                        specialists on
-                        WhatsApp for personalized recommendations and bulk orders.</p>
-
-                    <div
-                        class="bg-white dark:bg-stone-800 p-8 lg:p-10 rounded-[2rem] shadow-xl shadow-stone-200/50 dark:shadow-none border border-stone-200 dark:border-stone-700">
-                        <div class="space-y-6 text-left">
-                            <div class="grid sm:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="name"
-                                        class="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">Full
-                                        Name</label>
-                                    <input type="text" id="name"
-                                        class="w-full px-5 py-3 rounded-xl border border-stone-200 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 focus:ring-2 focus:ring-agri-green outline-none transition-all"
-                                        placeholder="Enter your name">
-                                </div>
-                                <div>
-                                    <label for="subject"
-                                        class="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">Subject</label>
-                                    <select id="subject"
-                                        class="w-full px-5 py-3 rounded-xl border border-stone-200 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 focus:ring-2 focus:ring-agri-green outline-none transition-all">
-                                        <option>Product Inquiry</option>
-                                        <option>Bulk Order</option>
-                                        <option>Farming Advice</option>
-                                        <option>Other</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="message"
-                                    class="block text-sm font-semibold text-stone-700 dark:text-stone-300 mb-2">Message</label>
-                                <textarea id="message" rows="4"
-                                    class="w-full px-5 py-3 rounded-xl border border-stone-200 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 focus:ring-2 focus:ring-agri-green outline-none transition-all"
-                                    placeholder="How can we help you?"></textarea>
-                            </div>
-                            <button onclick="sendToWhatsApp()"
-                                class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-3 shadow-lg shadow-green-500/20">
-                                <i data-lucide="message-circle" class="w-6 h-6"></i>
-                                Contact on WhatsApp
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Farming Tips Section -->
-            <section id="farming-tips"
-                class="py-24 overflow-hidden border-t border-stone-100 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/10">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-                        <div class="max-w-2xl">
-                            <h2 class="text-4xl font-bold mb-4" data-i18n="tips_title">Modern Farming Tips</h2>
-                            <p class="text-stone-500 dark:text-stone-400" data-i18n="tips_sub">Expert advice to help you
-                                maximize your
-                                harvest and
-                                maintain a sustainable farm. Updated weekly by our agronomists.</p>
-                        </div>
-                        <button data-i18n="view_all_tips"
-                            class="bg-stone-100 dark:bg-stone-800 px-6 py-3 rounded-xl font-bold hover:bg-agri-green hover:text-white transition-all">View
-                            All Tips</button>
-                    </div>
-
-                    <div id="tips-grid" class="grid md:grid-cols-3 gap-8">
-                        <!-- Tips will be injected here -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- Footer -->
-            <footer class="bg-stone-900 dark:bg-black text-white py-16 border-t border-stone-800">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="grid md:grid-cols-3 gap-12 mb-12">
-                        <div class="max-w-xs">
-                            <h3 class="text-2xl font-bold text-white mb-6">Agri<span
-                                    class="text-agri-green">Store</span></h3>
-                            <p class="text-stone-400" data-i18n="footer_desc">Leading provider of premium agricultural
-                                inputs and modern farming
-                                solutions.</p>
-                        </div>
-                        <div>
-                            <h3 class="font-bold mb-6" data-i18n="footer_links">Quick Links</h3>
-                            <ul class="space-y-3 text-stone-400">
-                                <li><a href="#" class="hover:text-agri-green transition-colors"
-                                        data-i18n="footer_products">Products</a></li>
-                                <li><a href="#" class="hover:text-agri-green transition-colors"
-                                        data-i18n="footer_bulk">Bulk Orders</a></li>
-                                <li><a href="#" class="hover:text-agri-green transition-colors"
-                                        data-i18n="footer_tips">Farming Tips</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="font-bold mb-6" data-i18n="footer_contact">Contact</h3>
-                            <ul class="space-y-3 text-stone-400">
-                                <li>Email: support@agristore.com</li>
-                                <li>Phone: +91 63607 60312</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="pt-8 border-t border-stone-800 text-center text-stone-500">
-                        <p data-i18n="footer_copy">© 2026 AgriStore. Designed for modern agriculture.</p>
-                    </div>
-                </div>
-            </footer>
-
-            <!-- Toast Notification -->
-            <div id="toast"
-                class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900 dark:bg-agri-green text-white px-6 py-3 rounded-full shadow-2xl z-[100] hidden transform translate-y-20 transition-all duration-300 flex items-center gap-3">
-                <i data-lucide="check-circle" class="w-5 h-5 text-agri-green dark:text-white"></i>
-                <span id="toast-msg">Added to cart</span>
+            <div class="pt-8 border-t border-stone-800 text-center text-stone-500">
+                <p>© 2026 AgriStore. Designed for modern agriculture.</p>
             </div>
+        </div>
+    </footer>
 
-            <script>
-                // Data
-                const products = [
-                    {
-                        id: 1,
-                        name: "Organic Tomato Seeds",
-                        category: "Seeds",
-                        price: 150,
-                        image: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?auto=format&fit=crop&q=80&w=800",
-                        description: "Vibrant and healthy organic tomato seeds, specifically bred for high yield and excellent disease resistance. Perfect for both garden beds and larger farming plots.",
-                        specs: { weight: "10g", brand: "AgriSeeds", usage: "Sunlight: 6-8 hrs" },
-                        rating: 4.5,
-                        reviews: 89
-                    },
-                    {
-                        id: 2,
-                        name: "Premium Soil Mix",
-                        category: "Fertilizer",
-                        price: 450,
-                        image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&q=80&w=800",
-                        description: "Our signature blend of peat, compost, and essential minerals. This premium soil mix provides the perfect foundation for strong root development and nutrient uptake.",
-                        specs: { weight: "5kg", brand: "BhoomiPlus", usage: "All Plants" },
-                        rating: 4.9,
-                        reviews: 245
-                    },
-                    {
-                        id: 3,
-                        name: "Gardening Trowel",
-                        category: "Tools",
-                        price: 299,
-                        image: "https://images.unsplash.com/photo-1416872928419-dc4206935551?auto=format&fit=crop&q=80&w=800",
-                        description: "Professional grade stainless steel trowel. Features an ergonomic hardwood handle and measurement markings for precise planting depth.",
-                        specs: { weight: "300g", brand: "IronHand", usage: "Digging/Planting" },
-                        rating: 4.7,
-                        reviews: 56
-                    },
-                    {
-                        id: 4,
-                        name: "Natural Nitrogen Fertilizer",
-                        category: "Fertilizer",
-                        price: 899,
-                        image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&q=80&w=800",
-                        description: "A fast-acting, organic liquid fertilizer rich in nitrogen. Ideal for leafy greens and vegetables during their peak growth stages.",
-                        specs: { weight: "1L", brand: "GreenNitro", usage: "Liquid Application" },
-                        rating: 4.6,
-                        reviews: 112
-                    },
-                    {
-                        id: 5,
-                        name: "Basil Herb Seeds",
-                        category: "Seeds",
-                        price: 120,
-                        image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&q=80&w=800",
-                        description: "Highly aromatic Genovese basil seeds. Easy to germinate and grows vigorously in sunlight. Perfect for culinary enthusiasts.",
-                        specs: { weight: "5g", brand: "AgriSeeds", usage: "Sunlight: 6 hrs" },
-                        rating: 4.8,
-                        reviews: 67
-                    },
-                    {
-                        id: 6,
-                        name: "Watering Can (5L)",
-                        category: "Tools",
-                        price: 550,
-                        image: "https://images.unsplash.com/photo-1536069221282-d877868cad6b?auto=format&fit=crop&q=80&w=800",
-                        description: "Balanced design with a long reach spout. Includes a brass rose head for gentle watering of small seedlings and delicate plants.",
-                        specs: { weight: "500g", brand: "EcoGrow", usage: "Outdoor/Indoor" },
-                        rating: 4.8,
-                        reviews: 124
-                    }
-                ];
+    <!-- Toast Notification -->
+    <div id="toast"
+        class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900 dark:bg-agri-green text-white px-6 py-3 rounded-full shadow-2xl z-[100] hidden transform translate-y-20 transition-all duration-300 flex items-center gap-3">
+        <i data-lucide="check-circle" class="w-5 h-5 text-agri-green dark:text-white"></i>
+        <span id="toast-msg">Added to cart</span>
+    </div>
 
-                const farmingTips = [
-                    {
-                        id: 1,
-                        title: "Smart Irrigation",
-                        icon: "cloud-rain",
-                        shortKey: "tip_1_short",
-                        contentKey: "tip_1_content"
-                    },
-                    {
-                        id: 2,
-                        title: "Organic Pest Control",
-                        icon: "bug",
-                        shortKey: "tip_2_short",
-                        contentKey: "tip_2_content"
-                    },
-                    {
-                        id: 3,
-                        title: "Soil Health 101",
-                        icon: "test-tube",
-                        shortKey: "tip_3_short",
-                        contentKey: "tip_3_content"
-                    }
-                ];
+    <script>
+        // Data
+        const products = [
+            {
+                id: 1,
+                name: "Organic Tomato Seeds",
+                nameKN: "ಸಾವಯವ ಟೊಮೆಟೊ ಬೀಜಗಳು",
+                category: "Seeds",
+                price: 150,
+                image: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?auto=format&fit=crop&q=80&w=800",
+                description: "Vibrant and healthy organic tomato seeds, specifically bred for high yield and excellent disease resistance.",
+                descriptionKN: "ಮನೆ ತೋಟಗಳಿಗೆ ಸೂಕ್ತವಾದ ಹೆಚ್ಚಿನ ಇಳುವರಿ ನೀಡುವ ಸಾವಯವ ಟೊಮೆಟೊ ಬೀಜಗಳು."
+            },
+            {
+                id: 2,
+                name: "Premium Soil Mix",
+                nameKN: "ಪ್ರೀಮಿಯಂ ಮಣ್ಣಿನ ಮಿಶ್ರಣ",
+                category: "Fertilizer",
+                price: 450,
+                image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&q=80&w=800",
+                description: "Our signature blend of peat, compost, and essential minerals. Provides the perfect foundation for strong root development.",
+                descriptionKN: "ಕುಂಡದಲ್ಲಿನ ಗಿಡಗಳು ಮತ್ತು ತರಕಾರಿ ಹಾಸಿಗೆಗಳಿಗೆ ಪೋಷಕಾಂಶ ಭರಿತ ಮಣ್ಣಿನ ಮಿಶ್ರಣ."
+            },
+            {
+                id: 3,
+                name: "Gardening Trowel",
+                nameKN: "ತೋಟಗಾರಿಕೆ ಸಲಕರಣೆ (ಟ್ರೋವಲ್)",
+                category: "Tools",
+                price: 299,
+                image: "https://images.unsplash.com/photo-1416872928419-dc4206935551?auto=format&fit=crop&q=80&w=800",
+                description: "Professional grade stainless steel trowel. Features an ergonomic hardwood handle.",
+                descriptionKN: "ದಕ್ಷ ರೀತಿಯ ಮರದ ಹಿಡಿಕೆಯನ್ನು ಹೊಂದಿರುವ ಬಾಳಿಕೆ ಬರುವ ಸ್ಟೇನ್‌ಲೆಸ್ ಸ್ಟೀಲ್ ಸಲಕರಣೆ."
+            },
+            {
+                id: 4,
+                name: "Natural Nitrogen Fertilizer",
+                nameKN: "ನೈಸರ್ಗಿಕ ಸಾರಜನಕ ಗೊಬ್ಬರ",
+                category: "Fertilizer",
+                price: 899,
+                image: "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&q=80&w=800",
+                description: "A fast-acting, organic liquid fertilizer rich in nitrogen. Ideal for leafy greens.",
+                descriptionKN: "ನಮ್ಮ ಸಾವಯವ ಸಾರಜನಕ ಸೂತ್ರದೊಂದಿಗೆ ನಿಮ್ಮ ಬೆಳೆ ವೈಫಲ್ಯವನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ತಡೆಯಿರಿ."
+            },
+            {
+                id: 5,
+                name: "Basil Herb Seeds",
+                nameKN: "ತುಳಸಿ ಬೀಜಗಳು",
+                category: "Seeds",
+                price: 120,
+                image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&q=80&w=800",
+                description: "Highly aromatic Genovese basil seeds. Easy to germinate and grows vigorously.",
+                descriptionKN: "ಸುಗಂಧಭರಿತ ತುಳಸಿ ಬೀಜಗಳು, ಬೆಳೆಯಲು ಸುಲಭ ಮತ್ತು ಅಡುಗೆಗೆ ಸೂಕ್ತ."
+            },
+            {
+                id: 6,
+                name: "Watering Can (5L)",
+                nameKN: "ನೀರನ್ನು ಹಾಕುವ ಕ್ಯಾನ್ (5 ಲೀಟರ್)",
+                category: "Tools",
+                price: 550,
+                image: "https://images.unsplash.com/photo-1536069221282-d877868cad6b?auto=format&fit=crop&q=80&w=800",
+                description: "Balanced design with a long reach spout. Includes a brass rose head for gentle watering.",
+                descriptionKN: "ತೆಗೆಯಬಹುದಾದ ರೋಸ್ ಹೆಡ್ ಹೊಂದಿರುವ ಹೆಚ್ಚಿನ ಸಾಮರ್ಥ್ಯದ ನೀರು ಹಾಕುವ ಕ್ಯಾನ್."
+            }
+        ];
 
-                // State
-                let currentLanguage = localStorage.getItem('agri_lang') || 'en';
-                let currentCategory = 'All';
-                let isDarkMode = localStorage.getItem('agri_theme') === 'dark';
-                let currentUser = JSON.parse(localStorage.getItem('agri_current_user')) || null;
-                let users = JSON.parse(localStorage.getItem('agri_users')) || [];
-                let appliedDiscount = 0;
+        const translations = {
+            EN: {
+                heroTitle: "Cultivate abundance with <span class='text-agri-green'>premium inputs</span>",
+                heroSub: "Source high-quality seeds, fertilizers, and tools. Bringing modern agricultural solutions to your doorstep.",
+                shopNow: "Shop Now",
+                learnGrowing: "Learn Growing",
+                featuredProducts: "Featured Products",
+                viewAll: "View all products",
+                yourCart: "Your Cart",
+                emptyCart: "Your cart is empty",
+                subtotal: "Subtotal",
+                checkout: "Proceed to Checkout",
+                contactTitle: "Expert Farming Advice",
+                contactSub: "Connect with our agricultural specialists on WhatsApp for personalized recommendations.",
+                nameLabel: "Full Name",
+                subjectLabel: "Subject",
+                messageLabel: "Message",
+                sendWhatsApp: "Contact on WhatsApp",
+                addToCart: "Add",
+                buyNow: "Buy Now",
+                orderMsg: "*🚀 New Order from AgriStore*",
+                langBtn: "KN",
+                catAll: "All",
+                catSeeds: "Seeds",
+                catFertilizer: "Fertilizer",
+                catTools: "Tools",
+                searchPlaceholder: "Search products..."
+            },
+            KN: {
+                heroTitle: "<span class='text-agri-green'>ಪ್ರೀಮಿಯಂ ಉತ್ಪನ್ನಗಳೊಂದಿಗೆ</span> ಸಮೃದ್ಧಿಯನ್ನು ಬೆಳೆಸಿಕೊಳ್ಳಿ",
+                heroSub: "ಉತ್ತಮ ಗುಣಮಟ್ಟದ ಬೀಜಗಳು, ಗೊಬ್ಬರಗಳು ಮತ್ತು ಉಪಕರಣಗಳನ್ನು ಪಡೆಯಿರಿ. ಆಧುನಿಕ ಕೃಷಿ ಪರಿಹಾರಗಳನ್ನು ನಿಮ್ಮ ಮನೆ ಬಾಗಿಲಿಗೆ ತರುತ್ತೇವೆ.",
+                shopNow: "ಈಗ ಖರೀದಿಸಿ",
+                learnGrowing: "ಕೃಷಿ ಬಗ್ಗೆ ತಿಳಿಯಿರಿ",
+                featuredProducts: "ವಿಶೇಷ ಉತ್ಪನ್ನಗಳು",
+                viewAll: "ಎಲ್ಲಾ ಉತ್ಪನ್ನಗಳನ್ನು ನೋಡಿ",
+                yourCart: "ನಿಮ್ಮ ಕಾರ್ಟ್",
+                emptyCart: "ನಿಮ್ಮ ಕಾರ್ಟ್ ಖಾಲಿಯಾಗಿದೆ",
+                subtotal: "ಒಟ್ಟು ಮೊತ್ತ",
+                checkout: "ಲಾಗಿನ್ ಮಾಡಿ",
+                contactTitle: "ತಜ್ಞ ಕೃಷಿ ಸಲಹೆ",
+                contactSub: "ವೈಯಕ್ತಿಕ ಶಿಫಾರಸುಗಳಿಗಾಗಿ WhatsApp ನಲ್ಲಿ ನಮ್ಮ ಕೃಷಿ ತಜ್ಞರೊಂದಿಗೆ ಸಂಪರ್ಕ ಸಾಧಿಸಿ.",
+                nameLabel: "ಪೂರ್ಣ ಹೆಸರು",
+                subjectLabel: "ವಿಷಯ",
+                messageLabel: "ಸಂದೇಶ",
+                sendWhatsApp: "WhatsApp ನಲ್ಲಿ ಸಂಪರ್ಕಿಸಿ",
+                addToCart: "ಸೇರಿಸಿ",
+                buyNow: "ಈಗ ಖರೀದಿಸಿ",
+                orderMsg: "*🚀 AgriStore ನಿಂದ ಹೊಸ ಆರ್ಡರ್*",
+                langBtn: "EN",
+                catAll: "ಎಲ್ಲಾ",
+                catSeeds: "ಬೀಜಗಳು",
+                catFertilizer: "ಗೊಬ್ಬರಗಳು",
+                catTools: "ಸಲಕರಣೆಗಳು",
+                searchPlaceholder: "ಉತ್ಪನ್ನಗಳನ್ನು ಹುಡುಕಿ..."
+            }
+        };
 
-                // User Data
-                let cart = [];
-                let wishlist = [];
-                let orders = [];
+        // State
+        let cart = JSON.parse(localStorage.getItem('agri_cart')) || [];
+        let currentCategory = 'All';
+        let isDarkMode = localStorage.getItem('agri_theme') === 'dark';
+        let language = localStorage.getItem('agri_lang') || 'EN';
 
-                const translations = {
-                    en: {
-                        // Navbar
-                        login: "Login",
-                        welcome: "Welcome,",
-                        my_orders: "My Orders",
-                        wishlist: "Wishlist",
-                        logout: "Logout",
-                        cart: "Your Cart",
+        // Init
+        window.onload = () => {
+            applyInitialTheme();
+            updateLanguageUI();
+            updateCartUI();
+            renderProducts(products);
+            lucide.createIcons();
+        };
 
-                        // Hero
-                        hero_badge: "New Harvest Season 2026",
-                        hero_title: "Cultivate abundance with premium inputs",
-                        hero_sub: "Source high-quality seeds, fertilizers, and tools. Bringing modern agricultural solutions to your doorstep.",
-                        shop_now: "Shop Now",
-                        learn_growing: "Learn Growing",
+        // Language
+        function toggleLanguage() {
+            language = language === 'EN' ? 'KN' : 'EN';
+            localStorage.setItem('agri_lang', language);
+            updateLanguageUI();
+            handleFilter(); // Synchronize with Search and Category filters
+            updateCartUI();
+        }
 
-                        // Filters
-                        search_placeholder: "Search products...",
-                        cat_all: "All",
-                        cat_seeds: "Seeds",
-                        cat_fertilizer: "Fertilizer",
-                        cat_tools: "Tools",
+        function updateLanguageUI() {
+            const t = translations[language];
+            const langBtnText = document.getElementById('lang-btn-text');
+            if (langBtnText) langBtnText.innerText = t.langBtn;
 
-                        // Cart
-                        empty_cart: "Your cart is empty",
-                        subtotal: "Subtotal",
-                        checkout: "Proceed to Checkout",
+            // Hero
+            const h1 = document.querySelector('h1');
+            if (h1) h1.innerHTML = t.heroTitle;
+            const heroSub = document.querySelector('h1 + p');
+            if (heroSub) heroSub.innerText = t.heroSub;
 
-                        // Product Modal
-                        add_to_cart: "Add to Cart",
-                        buy_now: "Buy Now",
-                        reviews: "reviews",
-                        specs: "Specifications",
-                        spec_weight: "Weight",
-                        spec_brand: "Brand",
-                        spec_usage: "Usage",
+            const shopBtn = document.querySelector('a[href="#products"]');
+            if (shopBtn) {
+                shopBtn.innerHTML = `${t.shopNow} <i data-lucide="arrow-right" class="w-5 h-5"></i>`;
+            }
+            const growBtn = document.querySelector('button:has(i[data-lucide="sprout"])');
+            if (growBtn) {
+                growBtn.innerHTML = `<i data-lucide="sprout" class="w-5 h-5"></i> ${t.learnGrowing}`;
+            }
 
-                        // Tips
-                        tips_title: "Modern Farming Tips",
-                        tips_sub: "Expert advice to help you maximize your harvest and maintain a sustainable farm. Updated weekly by our agronomists.",
-                        view_all_tips: "View All Tips",
-                        read_more: "Read More",
-                        guide: "Farming Guide",
-                        got_it: "Got it, Thanks!",
+            const emptyCartP = document.querySelector('#empty-cart-msg p');
+            if (emptyCartP) emptyCartP.innerText = t.emptyCart;
+            const checkoutBtn = document.querySelector('button[onclick="checkout()"]');
+            if (checkoutBtn) checkoutBtn.innerText = t.checkout;
 
-                        // Auth
-                        welcome_back: "Welcome Back",
-                        login_sub: "Login to manage your orders",
-                        email: "Email Address",
-                        password: "Password",
-                        no_account: "Don't have an account?",
-                        signup_btn: "Sign Up",
-                        join_agri: "Join AgriStore",
-                        signup_sub: "Start your modern farming journey",
-                        full_name: "Full Name",
-                        create_acc: "Create Account",
-                        already_acc: "Already have an account?",
-                        checkout_title: "Checkout",
-                        phone: "Phone Number",
-                        address: "Delivery Address",
-                        coupon: "Discount Coupon",
-                        apply: "Apply",
-                        grand_total: "Grand Total",
-                        confirm_order: "Confirm & Order via WhatsApp",
-                        footer_desc: "Leading provider of premium agricultural inputs and modern farming solutions.",
-                        footer_links: "Quick Links",
-                        footer_products: "Products",
-                        footer_bulk: "Bulk Orders",
-                        footer_tips: "Farming Tips",
-                        footer_contact: "Contact",
-                        footer_copy: "© 2026 AgriStore. Designed for modern agriculture.",
-                        toast_added: "Added to cart",
+            // Filters
+            const btns = document.querySelectorAll('.category-btn');
+            btns.forEach(btn => {
+                const cat = btn.getAttribute('data-category') || btn.innerText.trim();
+                let key = cat;
+                if (cat === 'ಎಲ್ಲಾ') key = 'All';
+                if (cat === 'ಬೀಜಗಳು') key = 'Seeds';
+                if (cat === 'ಗೊಬ್ಬರಗಳು') key = 'Fertilizer';
+                if (cat === 'ಸಲಕರಣೆಗಳು') key = 'Tools';
 
-                        // Data (Products)
-                        prod_1_name: "Organic Tomato Seeds",
-                        prod_1_desc: "Vibrant and healthy organic tomato seeds breeding for high yield.",
-                        prod_2_name: "Premium Soil Mix",
-                        prod_2_desc: "Our signature blend of peat, compost, and essential minerals.",
-                        prod_3_name: "Gardening Trowel",
-                        prod_3_desc: "Professional grade stainless steel trowel with ergonomic handle.",
-                        prod_4_name: "Natural Nitrogen Fertilizer",
-                        prod_4_desc: "Organic liquid fertilizer rich in nitrogen for leafy greens.",
-                        prod_5_name: "Basil Herb Seeds",
-                        prod_5_desc: "Highly aromatic Genovese basil seeds. Easy to germinate.",
-                        prod_6_name: "Watering Can (5L)",
-                        prod_6_desc: "Balanced design with a long reach spout for gentle watering.",
+                btn.setAttribute('data-category', key);
+                if (key === 'All') btn.innerText = t.catAll;
+                else if (key === 'Seeds') btn.innerText = t.catSeeds;
+                else if (key === 'Fertilizer') btn.innerText = t.catFertilizer;
+                else if (key === 'Tools') btn.innerText = t.catTools;
+            });
 
-                        // Data (Tips)
-                        tip_1_title: "Smart Irrigation",
-                        tip_1_short: "Learn how to optimize water usage using capillary sensors and automated drip systems for efficient growth.",
-                        tip_1_content: "Smart irrigation systems use technology to monitor soil moisture and weather conditions. By installing capillary sensors, you can ensure your plants receive exactly the amount of water they need, reducing waste and improving crop health. Drip systems deliver water directly to the roots, minimizing evaporation.",
-                        tip_2_title: "Organic Pest Control",
-                        tip_2_short: "Discover natural remedies and companion planting techniques to keep your crops safe without harsh chemicals.",
-                        tip_2_content: "Organic pest control focuses on natural solutions like neem oil, garlic sprays, and introducing beneficial insects like ladybugs. Companion planting—growing certain plants together (like marigolds with tomatoes)—can naturally repel pests without the need for synthetic chemicals.",
-                        tip_3_title: "Soil Health 101",
-                        tip_3_short: "A guide to testing soil pH and replenishing essential nutrients like Nitrogen, Phosphorus, and Potassium.",
-                        tip_3_content: "Healthy soil is the foundation of a good harvest. Regular pH testing helps you understand which nutrients are missing. Replenishing soil with organic compost, manure, or specific organic fertilizers ensures that Nitrogen, Phosphorus, and Potassium levels remain optimal for plant growth."
-                    },
-                    kn: {
-                        // Navbar
-                        login: "ಲಾಗ್ ಇನ್",
-                        welcome: "ಸ್ವಾಗತ,",
-                        my_orders: "ನನ್ನ ಆರ್ಡರ್‌ಗಳು",
-                        wishlist: "ಉದ್ದೇಶಿತ ಪಟ್ಟಿ",
-                        logout: "ಲಾಗ್ ಔಟ್",
-                        cart: "ನಿಮ್ಮ ಕಾರ್ಟ್",
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) searchInput.placeholder = t.searchPlaceholder;
 
-                        // Hero
-                        hero_badge: "ಹೊಸ ಸುಗ್ಗಿ ಕಾಲ 2026",
-                        hero_title: "ಉತ್ತಮ ಗುಣಮಟ್ಟದ ಕೃಷಿ ಉತ್ಪಾದನೆಗಳೊಂದಿಗೆ ಸಮೃದ್ಧಿಯನ್ನು ಬೆಳೆಸಿ",
-                        hero_sub: "ಉತ್ತಮ ಗುಣಮಟ್ಟದ ಬೀಜಗಳು, ರಸಗೊಬ್ಬರಗಳು ಮತ್ತು ಪರಿಕರಗಳನ್ನು ಪಡೆಯಿರಿ. ನಿಮ್ಮ ಮನೆ ಬಾಗಿಲಿಗೆ ಆಧುನಿಕ ಕೃಷಿ ಪರಿಹಾರಗಳನ್ನು ತರುವುದು.",
-                        shop_now: "ಈಗ ಖರೀದಿಸಿ",
-                        learn_growing: "ಬೆಳೆಯುವುದನ್ನು ಕಲಿಯಿರಿ",
+            // Contact
+            const contactTitle = document.querySelector('section.py-24 h2');
+            if (contactTitle) contactTitle.innerText = t.contactTitle;
+            const contactSub = document.querySelector('section.py-24 p');
+            if (contactSub) contactSub.innerText = t.contactSub;
+            const nameLabel = document.querySelector('label[for="name"]');
+            if (nameLabel) nameLabel.innerText = t.nameLabel;
+            const messageLabel = document.querySelector('label[for="message"]');
+            if (messageLabel) messageLabel.innerText = t.messageLabel;
+            const waBtn = document.querySelector('button[onclick="sendToWhatsApp()"]');
+            if (waBtn) {
+                waBtn.innerHTML = `<i data-lucide="phone" class="w-5 h-5"></i> ${t.sendWhatsApp}`;
+            }
 
-                        // Filters
-                        search_placeholder: "ಉತ್ಪನ್ನಗಳನ್ನು ಹುಡುಕಿ...",
-                        cat_all: "ಎಲ್ಲಾ",
-                        cat_seeds: "ಬೀಜಗಳು",
-                        cat_fertilizer: "ರಸಗೊಬ್ಬರ",
-                        cat_tools: "ಪರಿಕರಗಳು",
+            lucide.createIcons();
+        }
 
-                        // Cart
-                        empty_cart: "ನಿಮ್ಮ ಕಾರ್ಟ್ ಖಾಲಿಯಿದೆ",
-                        subtotal: "ಒಟ್ಟು",
-                        checkout: "ಚೆಕ್ ಔಟ್ ಮಾಡಿ",
+        // Theme
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.documentElement.classList.toggle('dark', isDarkMode);
+            localStorage.setItem('agri_theme', isDarkMode ? 'dark' : 'light');
+            updateDarkModeIcon();
+        }
 
-                        // Product Modal
-                        add_to_cart: "ಕಾರ್ಟ್‌ಗೆ ಸೇರಿಸಿ",
-                        buy_now: "ಈಗ ಖರೀದಿಸಿ",
-                        reviews: "ವಿಮರ್ಶೆಗಳು",
-                        specs: "ವಿವರಣೆಗಳು",
-                        spec_weight: "ತೂಕ",
-                        spec_brand: "ಬ್ರಾಂಡ್",
-                        spec_usage: "ಬಳಕೆ",
+        function applyInitialTheme() {
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark');
+            }
+            updateDarkModeIcon();
+        }
 
-                        // Tips
-                        tips_title: "ಆಧುನಿಕ ಕೃಷಿ ಸಲಹೆಗಳು",
-                        tips_sub: "ನಿಮ್ಮ ಸುಗ್ಗಿಯನ್ನು ಹೆಚ್ಚಿಸಲು ಮತ್ತು ಸುಸ್ಥಿರ ಕೃಷಿ ನಿರ್ವಹಿಸಲು ತಜ್ಞರ ಸಲಹೆ. ನಮ್ಮ ಕೃಷಿ ವಿಜ್ಞಾನಿಗಳಿಂದ ವಾರಕ್ಕೊಮ್ಮೆ ನವೀಕರಿಸಲಾಗುತ್ತದೆ.",
-                        view_all_tips: "ಎಲ್ಲಾ ಸಲಹೆಗಳನ್ನು ನೋಡಿ",
-                        read_more: "ಹೆಚ್ಚು ಓದಿ",
-                        guide: "ಕೃಷಿ ಮಾರ್ಗದರ್ಶಿ",
-                        got_it: "ತಿಳಿಯಿತು, ಧನ್ಯವಾದಗಳು!",
+        function updateDarkModeIcon() {
+            const icon = document.getElementById('dark-mode-icon');
+            if (icon) {
+                icon.setAttribute('data-lucide', isDarkMode ? 'sun' : 'moon');
+                lucide.createIcons();
+            }
+        }
 
-                        // Auth
-                        welcome_back: "ಮತ್ತೆ ಸ್ವಾಗತ",
-                        login_sub: "ನಿಮ್ಮ ಆರ್ಡರ್‌ಗಳನ್ನು ನಿರ್ವಹಿಸಲು ಲಾಗ್ ಇನ್ ಮಾಡಿ",
-                        email: "ಇಮೇಲ್ ವಿಳಾಸ",
-                        password: "ಪಾಸ್ವರ್ಡ್",
-                        no_account: "ಖಾತೆ ಇಲ್ಲವೇ?",
-                        signup_btn: "ಸೈನ್ ಅಪ್",
-                        join_agri: "AgriStore ಸೇರಿ",
-                        signup_sub: "ನಿಮ್ಮ ಆಧುನಿಕ ಕೃಷಿ ಪ್ರಯಾಣವನ್ನು ಪ್ರಾರಂಭಿಸಿ",
-                        full_name: "ಪೂರ್ಣ ಹೆಸರು",
-                        create_acc: "ಖಾತೆ ರಚಿಸಿ",
-                        already_acc: "ಈಗಾಗಲೇ ಖಾತೆ ಹೊಂದಿದ್ದೀರಾ?",
-                        checkout_title: "ಚೆಕ್ ಔಟ್",
-                        phone: "ಫೋನ್ ಸಂಖ್ಯೆ",
-                        address: "ವಿತರಣಾ ವಿಳಾಸ",
-                        coupon: "ರಿಯಾಯಿತಿ ಕೂಪನ್",
-                        apply: "ಅನ್ವಯಿಸು",
-                        grand_total: "ಒಟ್ಟು ಮೊತ್ತ",
-                        confirm_order: "ವಾಟ್ಸಾಪ್ ಮೂಲಕ ಆರ್ಡರ್ ಖಚಿತಪಡಿಸಿ",
-                        footer_desc: "ಪ್ರೀಮಿಯಂ ಕೃಷಿ ಪರಿಕರಗಳು ಮತ್ತು ಆಧುನಿಕ ಕೃಷಿ ಪರಿಹಾರಗಳ ಪ್ರಮುಖ ಪೂರೈಕೆದಾರರು.",
-                        footer_links: "ತ್ವರಿತ ಕೊಂಡಿಗಳು",
-                        footer_products: "ಉತ್ಪನ್ನಗಳು",
-                        footer_bulk: "ಬೃಹತ್ ಆರ್ಡರ್‌ಗಳು",
-                        footer_tips: "ಕೃಷಿ ಸಲಹೆಗಳು",
-                        footer_contact: "ಸಂಪರ್ಕ",
-                        footer_copy: "© 2026 AgriStore. ಆಧುನಿಕ ಕೃಷಿಗಾಗಿ ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ.",
-                        toast_added: "ಕಾರ್ಟ್‌ಗೆ ಸೇರಿಸಲಾಗಿದೆ",
+        // Filtering
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                const btnCat = btn.getAttribute('data-category') || btn.innerText.trim();
+                if (btnCat === cat) {
+                    btn.classList.add('bg-agri-green', 'text-white', 'border-transparent');
+                    btn.classList.remove('border-stone-200', 'dark:border-stone-700');
+                } else {
+                    btn.classList.remove('bg-agri-green', 'text-white', 'border-transparent');
+                    btn.classList.add('border-stone-200', 'dark:border-stone-700');
+                }
+            });
+            handleFilter();
+        }
 
-                        // Data (Products)
-                        prod_1_name: "ಸಾವಯವ ಟೊಮೆಟೊ ಬೀಜಗಳು",
-                        prod_1_desc: "ಹೆಚ್ಚಿನ ಇಳುವರಿ ಮತ್ತು ಅತ್ಯುತ್ತಮ ರೋಗ ನಿರೋಧಕ ಶಕ್ತಿಗಾಗಿ ವಿಶೇಷವಾಗಿ ಬೆಳೆಸಲಾದ ಸಾವಯವ ಟೊಮೆಟೊ ಬೀಜಗಳು.",
-                        prod_2_name: "ಪ್ರೀಮಿಯಂ ಮಣ್ಣಿನ ಮಿಶ್ರಣ",
-                        prod_2_desc: "ಪೀಟ್, ಕಾಂಪೋಸ್ಟ್ ಮತ್ತು ಅಗತ್ಯ ಖನಿಜಗಳ ನಮ್ಮ ಸಹಿ ಮಿಶ್ರಣ.",
-                        prod_3_name: "ಬಾಗದ ಕೈಚೂರಿ",
-                        prod_3_desc: "ದಕ್ಷತಾಶಾಸ್ತ್ರದ ಹ್ಯಾಂಡಲ್‌ನೊಂದಿಗೆ ವೃತ್ತಿಪರ ದರ್ಜೆಯ ಸ್ಟೇನ್‌ಲೆಸ್ ಸ್ಟೀಲ್ ಕೈಚೂರಿ.",
-                        prod_4_name: "ನೈಸರ್ಗಿಕ ಸಾರಜನಕ ಗೊಬ್ಬರ",
-                        prod_4_desc: "ಸೊಪ್ಪು ತರಕಾರಿಗಳಿಗೆ ಸಾರಜನಕಯುಕ್ತ ಸಾವಯವ ದ್ರವ ಗೊಬ್ಬರ.",
-                        prod_5_name: "ತುಳಸಿ ಬೀಜಗಳು",
-                        prod_5_desc: "ಅತ್ಯಂತ ಸುಗಂಧಭರಿತ ತುಳಸಿ ಬೀಜಗಳು. ಸುಲಭವಾಗಿ ಮೊಳಕೆಯೊಡೆಯುತ್ತವೆ.",
-                        prod_6_name: "ನೀರು ಹಾಕುವ ಕ್ಯಾನ್ (5L)",
-                        prod_6_desc: "ಸೌಮ್ಯವಾದ ನೀರುಣಿಸುವಿಕೆಗಾಗಿ ಸಮತೋಲಿತ ವಿನ್ಯಾಸ.",
+        function handleFilter() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = products.filter(p => {
+                const name = language === 'KN' ? p.nameKN : p.name;
+                const desc = language === 'KN' ? p.descriptionKN : p.description;
+                const matchesSearch = name.toLowerCase().includes(query) || desc.toLowerCase().includes(query);
+                const matchesCategory = currentCategory === 'All' || p.category === currentCategory;
+                return matchesSearch && matchesCategory;
+            });
+            renderProducts(filtered);
+        }
 
-                        // Data (Tips)
-                        tip_1_title: "ಸ್ಮಾರ್ಟ್ ನೀರಾವರಿ",
-                        tip_1_short: "ಕ್ಯಾಪಿಲರಿ ಸಂವೇದಕಗಳು ಮತ್ತು ಸ್ವಯಂಚಾಲಿತ ಡ್ರಿಪ್ ವ್ಯವಸ್ಥೆಗಳನ್ನು ಬಳಸಿಕೊಂಡು ನೀರಿನ ಬಳಕೆಯನ್ನು ಉತ್ತಮಗೊಳಿಸುವುದು ಹೇಗೆ ಎಂದು ತಿಳಿಯಿರಿ.",
-                        tip_1_content: "ಸ್ಮಾರ್ಟ್ ನೀರಾವರಿ ವ್ಯವಸ್ಥೆಗಳು ಮಣ್ಣಿನ ತೇವಾಂಶ ಮತ್ತು ಹವಾಮಾನ ಪರಿಸ್ಥಿತಿಗಳನ್ನು ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಲು ತಂತ್ರಜ್ಞಾನವನ್ನು ಬಳಸುತ್ತವೆ. ಕ್ಯಾಪಿಲರಿ ಸಂವೇದಕಗಳನ್ನು ಸ್ಥಾಪಿಸುವ ಮೂಲಕ, ನಿಮ್ಮ ಸಸ್ಯಗಳು ಅಗತ್ಯವಿರುವ ನೀರನ್ನು ಮಾತ್ರ ಪಡೆಯುವುದನ್ನು ನೀವು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಬಹುದು, ಇದರಿಂದ ನೀರು ವ್ಯರ್ಥವಾಗುವುದನ್ನು ಕಡಿಮೆ ಮಾಡಬಹುದು ಮತ್ತು ಬೆಳೆ ಆರೋಗ್ಯವನ್ನು ಸುಧಾರಿಸಬಹುದು. ಡ್ರಿಪ್ ವ್ಯವಸ್ಥೆಗಳು ನೀರನ್ನು ನೇರವಾಗಿ ಬೇರುಗಳಿಗೆ ತಲುಪಿಸುತ್ತವೆ, ಆವಿಯಾಗುವಿಕೆಯನ್ನು ಕಡಿಮೆ ಮಾಡುತ್ತವೆ.",
-                        tip_2_title: "ಸಾವಯವ ಕೀಟ ನಿಯಂತ್ರಣ",
-                        tip_2_short: "ನಿಮ್ಮ ಬೆಳೆಗಳನ್ನು ಹಾನಿಕಾರಕ ರಾಸಾಯನಿಕಗಳಿಲ್ಲದೆ ಸುರಕ್ಷಿತವಾಗಿಡಲು ನೈಸರ್ಗಿಕ ಪರಿಹಾರಗಳು ಮತ್ತು ಸಹವರ್ತಿ ನೆಡುವ ತಂತ್ರಗಳನ್ನು ಅನ್ವೇಷಿಸಿ.",
-                        tip_2_content: "ಸಾವಯವ ಕೀಟ ನಿಯಂತ್ರಣವು ಬೇವಿನ ಎಣ್ಣೆ, ಬೆಳ್ಳುಳ್ಳಿ ಸ್ಪ್ರೇಗಳು ಮತ್ತು ಲೇಡಿಬಗ್‌ಗಳಂತಹ ಪ್ರಯೋಜನಕಾರಿ ಕೀಟಗಳನ್ನು ಪರಿಚಯಿಸುವಂತಹ ನೈಸರ್ಗಿಕ ಪರಿಹಾರಗಳ ಮೇಲೆ ಕೇಂದ್ರೀಕರಿಸುತ್ತದೆ. ಸಹವರ್ತಿ ನೆಡುವಿಕೆ - ಕೆಲವು ಸಸ್ಯಗಳನ್ನು ಒಟ್ಟಿಗೆ ಬೆಳೆಸುವುದು (ಟೊಮೆಟೊಗಳೊಂದಿಗೆ ಮಾರಿಗೋಲ್ಡ್‌ಗಳಂತೆ) - ಸಂಶ್ಲೇಷಿತ ರಾಸಾಯನಿಕಗಳ ಅಗತ್ಯವಿಲ್ಲದೆ ಕೀಟಗಳನ್ನು ನೈಸರ್ಗಿಕವಾಗಿ ಹಿಮ್ಮೆಟ್ಟಿಸುತ್ತದೆ.",
-                        tip_3_title: "ಮಣ್ಣಿನ ಆರೋಗ್ಯ 101",
-                        tip_3_short: "ಮಣ್ಣಿನ pH ಪರೀಕ್ಷೆ ಮತ್ತು ಸಾರಜನಕ, ರಂಜಕ ಮತ್ತು ಪೊಟ್ಯಾಸಿಯಮ್‌ನಂತಹ ಅಗತ್ಯ ಪೋಷಕಾಂಶಗಳನ್ನು ಪುನಃ ತುಂಬಿಸುವ ಮಾರ್ಗದರ್ಶಿ.",
-                        tip_3_content: "ಆರೋಗ್ಯಕರ ಮಣ್ಣು ಉತ್ತಮ ಸುಗ್ಗಿಯ ಅಡಿಪಾಯವಾಗಿದೆ. ನಿಯಮಿತ pH ಪರೀಕ್ಷೆಯು ಯಾವ ಪೋಷಕಾಂಶಗಳು ಕಾಣೆಯಾಗಿವೆ ಎಂಬುದನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ನಿಮಗೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ. ಸಾವಯವ ಕಾಂಪೋಸ್ಟ್, ಗೊಬ್ಬರ ಅಥವಾ ನಿರ್ದಿಷ್ಟ ಸಾವಯವ ರಸಗೊಬ್ಬರಗಳೊಂದಿಗೆ ಮಣ್ಣನ್ನು ಪುನಃ ತುಂಬಿಸುವುದು ಸಸ್ಯಗಳ ಬೆಳವಣಿಗೆಗೆ ಸಾರಜನಕ, ರಂಜಕ ಮತ್ತು ಪೊಟಾಸಿಯಮ್ ಮಟ್ಟಗಳು ಸೂಕ್ತವಾಗಿರುವುದನ್ನು ಖಚಿತಪಡಿಸುತ್ತದೆ."
-                    }
-                };
+        // Rendering
+        function renderProducts(items) {
+            const grid = document.getElementById('product-grid');
+            const noResults = document.getElementById('no-results');
+            if (!grid) return;
+            grid.innerHTML = '';
 
-                function updateLanguage(lang) {
-                    currentLanguage = lang;
-                    localStorage.setItem('agri_lang', lang);
+            if (items.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
 
-                    // Update the EN/KN text in Navbar
-                    const langText = document.getElementById('current-lang-text');
-                    if (langText) langText.innerText = lang.toUpperCase();
+            items.forEach((p, idx) => {
+                const name = language === 'KN' ? p.nameKN : p.name;
+                const desc = language === 'KN' ? p.descriptionKN : p.description;
+                const addText = translations[language].addToCart;
+                const buyText = translations[language].buyNow;
 
-                    // Update static elements with data-i18n
-                    document.querySelectorAll('[data-i18n]').forEach(el => {
-                        const key = el.getAttribute('data-i18n');
-                        if (translations[lang][key]) {
-                            if (el.tagName === 'INPUT' && el.getAttribute('placeholder')) {
-                                el.placeholder = translations[lang][key];
-                            } else {
-                                el.innerText = translations[lang][key];
-                            }
-                        }
-                    });
-
-                    // Reload UI parts that are dynamically rendered
-                    renderProducts(products);
-                    renderTips();
-                    updateCartUI();
-                    updateAuthUI();
-                    lucide.createIcons();
+                let catDisplay = p.category;
+                if (language === 'KN') {
+                    if (p.category === 'Seeds') catDisplay = translations.KN.catSeeds;
+                    else if (p.category === 'Fertilizer') catDisplay = translations.KN.catFertilizer;
+                    else if (p.category === 'Tools') catDisplay = translations.KN.catTools;
+                } else {
+                    catDisplay = translations.EN[p.category.toLowerCase().replace(/\s/g, '')] || p.category; // Fallback for EN
                 }
 
-                function getStorageKey(baseKey, userId = null) {
-                    const id = userId || (currentUser ? currentUser.id : null);
-                    return id ? `${baseKey}_${id}` : baseKey;
-                }
-
-                function loadUserData() {
-                    const guestCart = JSON.parse(localStorage.getItem('agri_cart')) || [];
-                    const guestWishlist = JSON.parse(localStorage.getItem('agri_wishlist')) || [];
-
-                    cart = JSON.parse(localStorage.getItem(getStorageKey('agri_cart'))) || [];
-                    wishlist = JSON.parse(localStorage.getItem(getStorageKey('agri_wishlist'))) || [];
-                    orders = JSON.parse(localStorage.getItem(getStorageKey('agri_orders'))) || [];
-
-                    if (currentUser && (guestCart.length > 0 || guestWishlist.length > 0)) {
-                        // Merge guest cart
-                        guestCart.forEach(gItem => {
-                            const existing = cart.find(uItem => uItem.id === gItem.id);
-                            if (existing) existing.quantity += gItem.quantity;
-                            else cart.push(gItem);
-                        });
-                        // Merge guest wishlist
-                        guestWishlist.forEach(id => {
-                            if (!wishlist.includes(id)) wishlist.push(id);
-                        });
-
-                        // Save merged results
-                        saveCart();
-                        localStorage.setItem(getStorageKey('agri_wishlist'), JSON.stringify(wishlist));
-
-                        // Clear guest data
-                        localStorage.removeItem('agri_cart');
-                        localStorage.removeItem('agri_wishlist');
-                        localStorage.removeItem('agri_orders');
-                    }
-                }
-
-                function saveCart() {
-                    localStorage.setItem(getStorageKey('agri_cart'), JSON.stringify(cart));
-                }
-
-                function saveWishlist() {
-                    localStorage.setItem(getStorageKey('agri_wishlist'), JSON.stringify(wishlist));
-                }
-
-                function saveOrders() {
-                    localStorage.setItem(getStorageKey('agri_orders'), JSON.stringify(orders));
-                }
-
-                // Init
-                window.onload = () => {
-                    loadUserData();
-                    applyInitialTheme();
-                    updateLanguage(currentLanguage); // Initial language update
-                    renderProducts(products);
-                    lucide.createIcons();
-                };
-
-                // Auth Logic
-                function openAuthModal() {
-                    const modal = document.getElementById('auth-modal');
-                    modal.classList.remove('hidden');
-                    setTimeout(() => modal.classList.remove('opacity-0'), 10);
-                    document.body.classList.add('cart-open');
-                }
-
-                function closeAuthModal() {
-                    const modal = document.getElementById('auth-modal');
-                    modal.classList.add('opacity-0');
-                    setTimeout(() => modal.classList.add('hidden'), 300);
-                    document.body.classList.remove('cart-open');
-                }
-
-                function toggleAuthMode(mode) {
-                    const loginForm = document.getElementById('login-form');
-                    const signupForm = document.getElementById('signup-form');
-                    if (mode === 'signup') {
-                        loginForm.classList.add('hidden');
-                        signupForm.classList.remove('hidden');
-                    } else {
-                        loginForm.classList.remove('hidden');
-                        signupForm.classList.add('hidden');
-                    }
-                }
-
-                function handleSignup() {
-                    const name = document.getElementById('signup-name').value;
-                    const email = document.getElementById('signup-email').value;
-                    const password = document.getElementById('signup-password').value;
-
-                    if (!name || !email || !password) {
-                        showToast("Please fill all fields", true);
-                        return;
-                    }
-
-                    if (users.find(u => u.email === email)) {
-                        showToast("Email already exists", true);
-                        return;
-                    }
-
-                    const newUser = { name, email, password, id: Date.now() };
-                    users.push(newUser);
-                    localStorage.setItem('agri_users', JSON.stringify(users));
-
-                    currentUser = newUser;
-                    localStorage.setItem('agri_current_user', JSON.stringify(currentUser));
-
-                    loadUserData();
-                    updateAuthUI();
-                    updateCartUI();
-                    renderProducts(products); // Refresh to show wishlist status
-                    closeAuthModal();
-                    showToast(`Welcome, ${name}!`);
-                }
-
-                function handleLogin() {
-                    const email = document.getElementById('login-email').value;
-                    const password = document.getElementById('login-password').value;
-
-                    const user = users.find(u => u.email === email && u.password === password);
-                    if (user) {
-                        currentUser = user;
-                        localStorage.setItem('agri_current_user', JSON.stringify(currentUser));
-                        loadUserData();
-                        updateAuthUI();
-                        updateCartUI();
-                        renderProducts(products); // Refresh to show wishlist status
-                        closeAuthModal();
-                        showToast(`Welcome back, ${user.name}!`);
-                    } else {
-                        showToast("Invalid credentials", true);
-                    }
-                }
-
-                function handleLogout() {
-                    currentUser = null;
-                    localStorage.removeItem('agri_current_user');
-                    loadUserData();
-                    updateAuthUI();
-                    updateCartUI();
-                    renderProducts(products); // Refresh to clear wishlist status
-                    showToast("Logged out successfully");
-                }
-
-                function updateAuthUI() {
-                    const loginBtn = document.getElementById('login-btn');
-                    const userProfile = document.getElementById('user-profile');
-                    const avatarChar = document.getElementById('user-avatar-char');
-                    const nameDisplay = document.getElementById('user-name-display');
-
-                    if (currentUser) {
-                        loginBtn.classList.add('hidden');
-                        userProfile.classList.remove('hidden');
-                        avatarChar.innerText = currentUser.name.charAt(0).toUpperCase();
-                        nameDisplay.innerText = currentUser.name;
-                    } else {
-                        loginBtn.classList.remove('hidden');
-                        userProfile.classList.add('hidden');
-                    }
-                    lucide.createIcons();
-                }
-
-                // Theme
-                function toggleDarkMode() {
-                    isDarkMode = !isDarkMode;
-                    document.documentElement.classList.toggle('dark', isDarkMode);
-                    localStorage.setItem('agri_theme', isDarkMode ? 'dark' : 'light');
-                    updateDarkModeIcon();
-                }
-
-                function applyInitialTheme() {
-                    if (isDarkMode) {
-                        document.documentElement.classList.add('dark');
-                    }
-                    updateDarkModeIcon();
-                }
-
-                function updateDarkModeIcon() {
-                    const icon = document.getElementById('dark-mode-icon');
-                    icon.setAttribute('data-lucide', isDarkMode ? 'sun' : 'moon');
-                    lucide.createIcons();
-                }
-
-                // Wishlist & Orders Modals (Simulated)
-                function openWishlistModal() {
-                    showToast("Wishlist features coming in next update!", false);
-                }
-
-                function openOrdersModal() {
-                    showToast("Order history feature coming in next update!", false);
-                }
-
-                function toggleWishlist(productId) {
-                    const index = wishlist.indexOf(productId);
-                    if (index > -1) {
-                        wishlist.splice(index, 1);
-                        showToast("Removed from wishlist");
-                    } else {
-                        wishlist.push(productId);
-                        showToast("Added to wishlist");
-                    }
-                    saveWishlist();
-                    renderProducts(products);
-                }
-
-                // Coupon Logic
-                function applyCoupon() {
-                    const code = document.getElementById('coupon-input').value.trim().toUpperCase();
-                    const msgEl = document.getElementById('coupon-msg');
-
-                    if (code === 'AGRI10') {
-                        appliedDiscount = 10;
-                        msgEl.innerText = "Coupon AGRI10 applied! 10% discount added.";
-                        msgEl.className = "text-xs mb-4 text-agri-green block";
-                    } else if (code === 'SUMMER20') {
-                        appliedDiscount = 20;
-                        msgEl.innerText = "Coupon SUMMER20 applied! 20% discount added.";
-                        msgEl.className = "text-xs mb-4 text-agri-green block";
-                    } else {
-                        appliedDiscount = 0;
-                        msgEl.innerText = "Invalid coupon code";
-                        msgEl.className = "text-xs mb-4 text-red-500 block";
-                    }
-                    updateCheckoutTotal();
-                }
-
-                function updateCheckoutTotal() {
-                    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                    const discountAmount = (subtotal * appliedDiscount) / 100;
-                    const finalTotal = subtotal - discountAmount;
-                    document.getElementById('checkout-total').innerText = `₹${finalTotal}`;
-                }
-
-                // Farming Tips Logic
-                function renderTips() {
-                    const grid = document.getElementById('tips-grid');
-                    if (!grid) return;
-                    grid.innerHTML = '';
-
-                    const readMoreText = translations[currentLanguage].read_more || "Read More";
-
-                    farmingTips.forEach(tip => {
-                        const titleKey = `tip_${tip.id}_title`;
-                        const shortKey = `tip_${tip.id}_short`;
-
-                        const displayTitle = translations[currentLanguage][titleKey] || tip.title;
-                        const displayShort = translations[currentLanguage][shortKey] || tip.short;
-
-                        const card = document.createElement('div');
-                        card.onclick = () => openTipModal(tip.id);
-                        card.className = "group bg-white dark:bg-stone-900 p-8 rounded-[2.5rem] border border-stone-100 dark:border-stone-800 hover:border-agri-green transition-all duration-500 shadow-xl shadow-stone-200/50 dark:shadow-none cursor-pointer";
-                        card.innerHTML = `
-                            <div class="w-14 h-14 bg-agri-light dark:bg-agri-green/20 rounded-2xl flex items-center justify-center text-agri-green mb-8 group-hover:scale-110 transition-transform">
-                                <i data-lucide="${tip.icon}" class="w-7 h-7"></i>
-                            </div>
-                            <h3 class="text-xl font-bold mb-4 group-hover:text-agri-green transition-colors">${displayTitle}</h3>
-                            <p class="text-stone-500 dark:text-stone-400 leading-relaxed mb-6">${displayShort}</p>
-                            <button class="inline-flex items-center gap-2 text-agri-green font-bold group">${readMoreText} <i
-                                    data-lucide="chevron-right"
-                                    class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i></button>
-                        `;
-                        grid.appendChild(card);
-                    });
-                    lucide.createIcons();
-                }
-
-                function openTipModal(tipId) {
-                    const tip = farmingTips.find(t => t.id === tipId);
-                    if (!tip) return;
-
-                    const titleKey = `tip_${tipId}_title`;
-                    const contentKey = `tip_${tipId}_content`;
-
-                    document.getElementById('tip-modal-title').innerText = translations[currentLanguage][titleKey] || tip.title;
-                    document.getElementById('tip-modal-content').innerText = translations[currentLanguage][contentKey] || tip.content;
-                    document.getElementById('tip-modal-icon').innerHTML = `<i data-lucide="${tip.icon}" class="w-10 h-10"></i>`;
-
-                    const modal = document.getElementById('tip-modal');
-                    modal.classList.remove('hidden');
-                    setTimeout(() => modal.classList.remove('opacity-0'), 10);
-                    document.body.classList.add('cart-open');
-                    lucide.createIcons();
-                }
-
-                function closeTipModal() {
-                    const modal = document.getElementById('tip-modal');
-                    modal.classList.add('opacity-0');
-                    setTimeout(() => modal.classList.add('hidden'), 300);
-                    document.body.classList.remove('cart-open');
-                }
-
-                // Filtering
-                function setCategory(cat) {
-                    currentCategory = cat;
-                    document.querySelectorAll('.category-btn').forEach(btn => {
-                        if (btn.getAttribute('data-category') === cat) {
-                            btn.classList.add('bg-agri-green', 'text-white', 'border-transparent');
-                            btn.classList.remove('border-stone-200', 'dark:border-stone-700');
-                        } else {
-                            btn.classList.remove('bg-agri-green', 'text-white', 'border-transparent');
-                            btn.classList.add('border-stone-200', 'dark:border-stone-700');
-                        }
-                    });
-                    handleFilter();
-                }
-
-                function handleFilter() {
-                    const query = document.getElementById('search-input').value.toLowerCase();
-                    const filtered = products.filter(p => {
-                        const matchesSearch = p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
-                        const matchesCategory = currentCategory === 'All' || p.category === currentCategory;
-                        return matchesSearch && matchesCategory;
-                    });
-                    renderProducts(filtered);
-                }
-
-                // Rendering
-                function renderProducts(items) {
-                    const grid = document.getElementById('product-grid');
-                    const noResults = document.getElementById('no-results');
-                    grid.innerHTML = '';
-
-                    if (items.length === 0) {
-                        noResults.classList.remove('hidden');
-                        return;
-                    }
-                    noResults.classList.add('hidden');
-
-                    items.forEach((p, idx) => {
-                        const card = document.createElement('div');
-                        card.className = `bg-white dark:bg-stone-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-stone-100 dark:border-stone-700 group cursor-pointer animate-fade-in-up`;
-                        card.style.animationDelay = `${idx * 0.1}s`;
-                        card.onclick = () => openModal(p);
-
-                        const isInWishlist = wishlist.find(id => id === p.id);
-
-                        // Translated category
-                        const catKey = `cat_${p.category.toLowerCase()}`;
-                        const displayCat = translations[currentLanguage][catKey] || p.category;
-                        const addBtnText = translations[currentLanguage].add_to_cart || "Add";
-                        const buyNowText = translations[currentLanguage].buy_now || "Buy Now";
-
-                        card.innerHTML = `
+                const card = document.createElement('div');
+                card.className = `bg-white dark:bg-stone-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-stone-100 dark:border-stone-700 group cursor-pointer animate-fade-in-up`;
+                card.style.animationDelay = `${idx * 0.1}s`;
+                card.onclick = () => openModal(p);
+                card.innerHTML = `
                     <div class="relative h-72 overflow-hidden">
-                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                        <img src="${p.image}" alt="${name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         <div class="absolute top-4 left-4 bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-stone-800 dark:text-stone-200 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
-                            ${displayCat}
+                            ${catDisplay}
                         </div>
-                        <button onclick="event.stopPropagation(); toggleWishlist(${p.id})" 
-                            class="absolute top-4 right-4 p-2 bg-white/90 dark:bg-stone-900/90 backdrop-blur-md rounded-full shadow-sm hover:scale-110 transition-all ${isInWishlist ? 'text-red-500' : 'text-stone-400'}">
-                            <i data-lucide="heart" class="w-5 h-5 ${isInWishlist ? 'fill-current' : ''}"></i>
-                        </button>
                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                              <button onclick="event.stopPropagation(); buyNow(${p.id})" class="bg-white text-stone-900 px-4 py-2 rounded-lg font-bold text-sm hover:bg-agri-green hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300">
-                                ${buyNowText}
+                                ${buyText}
                              </button>
                         </div>
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-stone-900 dark:text-white mb-2 group-hover:text-agri-green transition-colors">${p.name}</h3>
-                        <p class="text-stone-500 dark:text-stone-400 text-sm line-clamp-2 mb-6">${p.description}</p>
+                        <h3 class="text-xl font-bold text-stone-900 dark:text-white mb-2 group-hover:text-agri-green transition-colors">${name}</h3>
+                        <p class="text-stone-500 dark:text-stone-400 text-sm line-clamp-2 mb-6">${desc}</p>
                         <div class="flex items-center justify-between mt-auto">
                             <span class="text-2xl font-bold text-agri-green">₹${p.price}</span>
                             <button onclick="event.stopPropagation(); addToCart(${p.id})" class="flex items-center gap-2 bg-stone-900 dark:bg-white text-white dark:text-stone-900 px-5 py-2.5 rounded-xl text-sm font-bold transition-all active:scale-95 group-hover:bg-agri-green group-hover:text-white">
-                                <i data-lucide="shopping-cart" class="w-4 h-4"></i> ${addBtnText}
+                                <i data-lucide="shopping-cart" class="w-4 h-4"></i> ${addText}
                             </button>
                         </div>
                     </div>
                 `;
-                        grid.appendChild(card);
-                    });
-                    lucide.createIcons();
-                }
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
 
-                // Modal Logic
-                function openModal(p) {
-                    const nameKey = `prod_${p.id}_name`;
-                    const descKey = `prod_${p.id}_desc`;
-                    const catKey = `cat_${p.category.toLowerCase()}`;
+        // Modal Logic
+        function openModal(p) {
+            const name = language === 'KN' ? p.nameKN : p.name;
+            const desc = language === 'KN' ? p.descriptionKN : p.description;
+            const buyText = translations[language].buyNow;
+            const addText = translations[language].addToCart;
 
-                    document.getElementById('modal-img').src = p.image;
-                    document.getElementById('modal-name').innerText = translations[currentLanguage][nameKey] || p.name;
-                    document.getElementById('modal-desc').innerText = translations[currentLanguage][descKey] || p.description;
-                    document.getElementById('modal-price').innerText = `₹${p.price}`;
-                    document.getElementById('modal-category').innerText = translations[currentLanguage][catKey] || p.category;
+            document.getElementById('modal-img').src = p.image;
+            document.getElementById('modal-name').innerText = name;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-price').innerText = `₹${p.price}`;
+            document.getElementById('modal-category').innerText = p.category;
 
-                    // Rating and Specs
-                    document.getElementById('modal-rating').innerText = `${p.rating} (${p.reviews} reviews)`;
-                    document.getElementById('spec-weight').innerText = p.specs.weight;
-                    document.getElementById('spec-brand').innerText = p.specs.brand;
-                    document.getElementById('spec-usage').innerText = p.specs.usage;
+            const addBtn = document.getElementById('modal-add-btn');
+            addBtn.innerText = addText;
+            addBtn.onclick = () => {
+                addToCart(p.id);
+                closeModal();
+            };
 
-                    const addBtn = document.getElementById('modal-add-btn');
-                    addBtn.onclick = () => {
-                        addToCart(p.id);
-                        closeModal();
-                    };
+            let existingBuyBtn = document.getElementById('modal-buy-btn');
+            if (!existingBuyBtn) {
+                existingBuyBtn = document.createElement('button');
+                existingBuyBtn.id = 'modal-buy-btn';
+                existingBuyBtn.className = "ml-4 bg-white dark:bg-stone-800 border-2 border-agri-green text-agri-green hover:bg-agri-green hover:text-white px-8 py-3 rounded-xl font-bold transition-all";
+                document.getElementById('modal-add-btn').parentElement.appendChild(existingBuyBtn);
+            }
+            existingBuyBtn.innerText = buyText;
+            existingBuyBtn.onclick = () => buyNow(p.id);
 
-                    // Add Buy Now to Modal if missing
-                    let existingBuyBtn = document.getElementById('modal-buy-btn');
-                    if (!existingBuyBtn) {
-                        existingBuyBtn = document.createElement('button');
-                        existingBuyBtn.id = 'modal-buy-btn';
-                        existingBuyBtn.className = "ml-4 bg-white dark:bg-stone-800 border-2 border-agri-green text-agri-green hover:bg-agri-green hover:text-white px-8 py-3 rounded-xl font-bold transition-all";
-                        existingBuyBtn.innerText = translations[currentLanguage].buy_now || "Buy Now";
-                        document.getElementById('modal-add-btn').parentElement.appendChild(existingBuyBtn);
-                    }
-                    existingBuyBtn.innerText = translations[currentLanguage].buy_now || "Buy Now";
-                    existingBuyBtn.onclick = () => buyNow(p.id);
+            const modal = document.getElementById('product-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+            document.body.classList.add('cart-open');
+            lucide.createIcons();
+        }
 
-                    const modal = document.getElementById('product-modal');
-                    modal.classList.remove('hidden');
-                    setTimeout(() => {
-                        modal.classList.remove('opacity-0');
-                    }, 10);
-                    document.body.classList.add('cart-open');
-                    lucide.createIcons();
-                }
+        function closeModal() {
+            const modal = document.getElementById('product-modal');
+            if (modal) {
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+                document.body.classList.remove('cart-open');
+            }
+        }
 
-                function closeModal() {
-                    const modal = document.getElementById('product-modal');
-                    modal.classList.add('opacity-0');
-                    setTimeout(() => {
-                        modal.classList.add('hidden');
-                    }, 300);
-                    document.body.classList.remove('cart-open');
-                }
+        // Cart Logic
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            const isOpen = !sidebar.classList.contains('translate-x-full');
 
-                // Cart Logic
-                function toggleCart() {
-                    const sidebar = document.getElementById('cart-sidebar');
-                    const overlay = document.getElementById('cart-overlay');
-                    const isOpen = !sidebar.classList.contains('translate-x-full');
+            if (isOpen) {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+                document.body.classList.remove('cart-open');
+            } else {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+                document.body.classList.add('cart-open');
+                updateCartUI();
+            }
+        }
 
-                    if (isOpen) {
-                        sidebar.classList.add('translate-x-full');
-                        overlay.classList.add('opacity-0');
-                        setTimeout(() => overlay.classList.add('hidden'), 300);
-                        document.body.classList.remove('cart-open');
-                    } else {
-                        sidebar.classList.remove('translate-x-full');
-                        overlay.classList.remove('hidden');
-                        setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-                        document.body.classList.add('cart-open');
-                        updateCartUI();
-                    }
-                }
+        function addToCart(productId) {
+            const p = products.find(x => x.id === productId);
+            const exists = cart.find(item => item.id === productId);
 
-                function addToCart(productId) {
-                    const p = products.find(x => x.id === productId);
-                    const exists = cart.find(item => item.id === productId);
+            if (exists) {
+                exists.quantity += 1;
+            } else {
+                cart.push({ ...p, quantity: 1 });
+            }
 
-                    if (exists) {
-                        exists.quantity += 1;
-                    } else {
-                        cart.push({ ...p, quantity: 1 });
-                    }
+            saveCart();
+            showToast(`Added ${language === 'KN' ? p.nameKN : p.name} to cart`);
+            updateCartUI();
+        }
 
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            saveCart();
+            updateCartUI();
+        }
+
+        function updateQuantity(productId, delta) {
+            const item = cart.find(x => x.id === productId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
                     saveCart();
-                    const toastMsg = translations[currentLanguage].toast_added || "Added to cart";
-                    showToast(`${toastMsg}: ${p.name}`);
                     updateCartUI();
                 }
+            }
+        }
 
-                function removeFromCart(productId) {
-                    cart = cart.filter(item => item.id !== productId);
-                    saveCart();
-                    updateCartUI();
-                }
+        function saveCart() {
+            localStorage.setItem('agri_cart', JSON.stringify(cart));
+        }
 
-                function updateQuantity(productId, delta) {
-                    const item = cart.find(x => x.id === productId);
-                    if (item) {
-                        item.quantity += delta;
-                        if (item.quantity <= 0) {
-                            removeFromCart(productId);
-                        } else {
-                            saveCart();
-                            updateCartUI();
-                        }
-                    }
-                }
+        function updateCartUI() {
+            const itemsContainer = document.getElementById('cart-items');
+            const emptyMsg = document.getElementById('empty-cart-msg');
+            const badge = document.getElementById('cart-badge');
+            const totalDisplay = document.getElementById('cart-total');
 
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-                function updateCartUI() {
-                    const itemsContainer = document.getElementById('cart-items');
-                    const emptyMsg = document.getElementById('empty-cart-msg');
-                    const badge = document.getElementById('cart-badge');
-                    const totalDisplay = document.getElementById('cart-total');
+            badge.innerText = count;
+            badge.classList.toggle('hidden', count === 0);
+            totalDisplay.innerText = `₹${total}`;
 
-                    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-                    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            if (cart.length === 0) {
+                emptyMsg.classList.remove('hidden');
+                itemsContainer.querySelectorAll('.cart-item-row').forEach(el => el.remove());
+            } else {
+                emptyMsg.classList.add('hidden');
+                itemsContainer.querySelectorAll('.cart-item-row').forEach(el => el.remove());
 
-                    badge.innerText = count;
-                    badge.classList.toggle('hidden', count === 0);
-                    totalDisplay.innerText = `₹${total}`;
-
-                    if (cart.length === 0) {
-                        emptyMsg.classList.remove('hidden');
-                        itemsContainer.querySelectorAll('.cart-item-row').forEach(el => el.remove());
-                    } else {
-                        emptyMsg.classList.add('hidden');
-                        itemsContainer.querySelectorAll('.cart-item-row').forEach(el => el.remove());
-
-                        cart.forEach(item => {
-                            const row = document.createElement('div');
-                            row.className = 'cart-item-row flex gap-4 bg-stone-50 dark:bg-stone-800/50 p-4 rounded-2xl border border-stone-100 dark:border-stone-700';
-                            row.innerHTML = `
+                cart.forEach(item => {
+                    const name = language === 'KN' ? item.nameKN : item.name;
+                    const row = document.createElement('div');
+                    row.className = 'cart-item-row flex gap-4 bg-stone-50 dark:bg-stone-800/50 p-4 rounded-2xl border border-stone-100 dark:border-stone-700';
+                    row.innerHTML = `
                         <img src="${item.image}" class="w-16 h-16 rounded-lg object-cover" />
                         <div class="flex-1">
-                            <h4 class="font-bold text-sm">${item.name}</h4>
+                            <h4 class="font-bold text-sm">${name}</h4>
                             <p class="text-agri-green font-bold text-sm">₹${item.price}</p>
                             <div class="flex items-center gap-3 mt-2">
                                 <button onclick="updateQuantity(${item.id}, -1)" class="w-6 h-6 border dark:border-stone-600 rounded flex items-center justify-center hover:bg-stone-200 dark:hover:bg-stone-700">-</button>
@@ -1472,130 +849,117 @@
                             <i data-lucide="trash-2" class="w-5 h-5"></i>
                         </button>
                     `;
-                            itemsContainer.appendChild(row);
-                        });
-                    }
-                    lucide.createIcons();
-                }
+                    itemsContainer.appendChild(row);
+                });
+            }
+            lucide.createIcons();
+        }
 
-                // WhatsApp Logic
-                function sendToWhatsApp() {
-                    const name = document.getElementById('name').value;
-                    const message = document.getElementById('message').value;
-                    const subject = document.getElementById('subject').value;
-                    const phoneNumber = "916360760312";
+        // WhatsApp Logic
+        function sendToWhatsApp() {
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            const subject = document.getElementById('subject') ? document.getElementById('subject').value : 'Inquiry';
+            const phoneNumber = "916360760312";
 
-                    if (!name || !message) {
-                        showToast("Please fill in required fields", true);
-                        return;
-                    }
+            if (!name || !message) {
+                showToast("Please fill in required fields", true);
+                return;
+            }
 
-                    const text = `*New Inquiry from AgriStore*\n\n*Name:* ${name}\n*Subject:* ${subject}\n*Message:* ${message}`;
-                    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
-                    window.open(url, '_blank');
-                }
+            const header = translations[language].orderMsg;
+            const text = `${header}\n\n*Name:* ${name}\n*Subject:* ${subject}\n*Message:* ${message}`;
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
 
-                // Checkout Logic
-                function openCheckout() {
-                    if (cart.length === 0) {
-                        showToast("Your cart is empty!", true);
-                        return;
-                    }
-                    const modal = document.getElementById('checkout-modal');
-                    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                    document.getElementById('checkout-total').innerText = `₹${total}`;
+        // Checkout Logic
+        function openCheckout() {
+            if (cart.length === 0) {
+                showToast("Your cart is empty!", true);
+                return;
+            }
+            const modal = document.getElementById('checkout-modal');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('checkout-total').innerText = `₹${total}`;
 
-                    modal.classList.remove('hidden');
-                    setTimeout(() => modal.classList.remove('opacity-0'), 10);
-                    document.body.classList.add('cart-open');
-                }
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            document.body.classList.add('cart-open');
+        }
 
-                function closeCheckout() {
-                    const modal = document.getElementById('checkout-modal');
-                    modal.classList.add('opacity-0');
-                    setTimeout(() => modal.classList.add('hidden'), 300);
-                    document.body.classList.remove('cart-open');
-                }
+        function closeCheckout() {
+            const modal = document.getElementById('checkout-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+            document.body.classList.remove('cart-open');
+        }
 
-                function confirmOrder() {
-                    const name = document.getElementById('checkout-name').value;
-                    const phone = document.getElementById('checkout-phone').value;
-                    const address = document.getElementById('checkout-address').value;
+        function confirmOrder() {
+            const name = document.getElementById('checkout-name').value;
+            const phone = document.getElementById('checkout-phone').value;
+            const address = document.getElementById('checkout-address').value;
 
-                    if (!name || !phone || !address) {
-                        alert("Please fill in all checkout details!");
-                        return;
-                    }
+            if (!name || !phone || !address) {
+                alert("Please fill in all checkout details!");
+                return;
+            }
 
-                    let orderDetails = `*🚀 New Order from AgriStore*\n\n`;
-                    orderDetails += `*👤 Customer:* ${name}\n`;
-                    orderDetails += `*📞 Phone:* ${phone}\n`;
-                    orderDetails += `*📍 Address:* ${address}\n\n`;
-                    orderDetails += `*📦 Items:*\n`;
+            let orderDetails = translations[language].orderMsg + `\n\n`;
+            orderDetails += `*👤 Customer:* ${name}\n`;
+            orderDetails += `*📞 Phone:* ${phone}\n`;
+            orderDetails += `*📍 Address:* ${address}\n\n`;
+            orderDetails += `*📦 Items:*\n`;
 
-                    cart.forEach(item => {
-                        orderDetails += `- ${item.name} (x${item.quantity}) - ₹${item.price * item.quantity}\n`;
-                    });
+            cart.forEach(item => {
+                const itemName = language === 'KN' ? item.nameKN : item.name;
+                orderDetails += `- ${itemName} (x${item.quantity}) - ₹${item.price * item.quantity}\n`;
+            });
 
-                    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                    const discountAmount = (subtotal * appliedDiscount) / 100;
-                    const finalTotal = subtotal - discountAmount;
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            orderDetails += `\n*💰 Total Amount:* ₹${total}`;
 
-                    if (appliedDiscount > 0) {
-                        orderDetails += `\n*💰 Subtotal:* ₹${subtotal}`;
-                        orderDetails += `\n*🎁 Discount (${appliedDiscount}%):* -₹${discountAmount}`;
-                    }
-                    orderDetails += `\n*✅ Final Total:* ₹${finalTotal}`;
+            const url = `https://wa.me/916360760312?text=${encodeURIComponent(orderDetails)}`;
+            window.open(url, '_blank');
 
-                    const url = `https://wa.me/916360760312?text=${encodeURIComponent(orderDetails)}`;
-                    window.open(url, '_blank');
+            // Success cleanup
+            cart = [];
+            saveCart();
+            updateCartUI();
+            closeCheckout();
+            if (!document.getElementById('cart-sidebar').classList.contains('translate-x-full')) toggleCart();
+            showToast("Order sent successfully!");
+        }
 
-                    // Success cleanup
-                    const orderRecord = {
-                        id: Date.now(),
-                        items: [...cart],
-                        total: finalTotal,
-                        date: new Date().toISOString()
-                    };
-                    orders.push(orderRecord);
-                    saveOrders();
+        function checkout() {
+            openCheckout();
+        }
 
-                    cart = [];
-                    saveCart();
-                    updateCartUI();
-                    closeCheckout();
-                    if (!document.getElementById('cart-sidebar').classList.contains('translate-x-full')) toggleCart();
-                    showToast("Order sent successfully!");
-                }
+        function buyNow(productId) {
+            const existsInCart = cart.find(item => item.id === productId);
+            if (!existsInCart) {
+                const p = products.find(x => x.id === productId);
+                cart.push({ ...p, quantity: 1 });
+                saveCart();
+                updateCartUI();
+            }
+            closeModal();
+            openCheckout();
+        }
 
-                function checkout() { // This triggers from the Sidebar
-                    openCheckout();
-                }
-
-                function buyNow(productId) {
-                    const existsInCart = cart.find(item => item.id === productId);
-                    if (!existsInCart) {
-                        const p = products.find(x => x.id === productId);
-                        cart.push({ ...p, quantity: 1 });
-                        saveCart();
-                        updateCartUI();
-                    }
-                    closeModal();
-                    openCheckout();
-                }
-
-                function showToast(msg, isError = false) {
-                    const toast = document.getElementById('toast');
-                    const msgEl = document.getElementById('toast-msg');
-                    msgEl.innerText = msg;
-
-                    toast.classList.remove('hidden', 'translate-y-20');
-                    setTimeout(() => {
-                        toast.classList.add('translate-y-20');
-                        setTimeout(() => toast.classList.add('hidden'), 300);
-                    }, 3000);
-                }
-            </script>
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-msg');
+            if (toast && msgEl) {
+                msgEl.innerText = msg;
+                toast.classList.remove('hidden', 'translate-y-20');
+                setTimeout(() => {
+                    toast.classList.add('translate-y-20');
+                    setTimeout(() => toast.classList.add('hidden'), 300);
+                }, 3000);
+            }
+        }
+    </script>
 </body>
 
 </html>
