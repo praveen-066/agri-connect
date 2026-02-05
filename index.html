@@ -292,6 +292,78 @@
         </div>
     </div>
 
+    <!-- Farming Guide Section -->
+    <section id="farming-guide"
+        class="py-24 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 id="farming-title" class="text-4xl font-bold text-stone-900 dark:text-white mb-4">Farmer's Seasonal
+                    Guide</h2>
+                <p id="farming-sub" class="text-lg text-stone-500 dark:text-stone-400">Monthly recommendations for your
+                    successful harvest.</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                <!-- Month Selector -->
+                <div class="w-full lg:w-48 shrink-0">
+                    <div class="flex lg:flex-col overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 gap-2 no-scrollbar"
+                        id="month-selector">
+                        <!-- Months injected here -->
+                    </div>
+                </div>
+
+                <!-- Guide Content -->
+                <div class="flex-1 w-full">
+                    <div id="guide-card"
+                        class="bg-stone-50 dark:bg-stone-800/50 p-8 lg:p-12 rounded-[2.5rem] border border-stone-200 dark:border-stone-700 relative overflow-hidden transition-all duration-500">
+                        <div class="absolute top-0 right-0 p-8 opacity-5">
+                            <i data-lucide="sprout" class="w-32 h-32 text-agri-green"></i>
+                        </div>
+
+                        <div class="grid md:grid-cols-3 gap-8 relative z-10">
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-3 text-agri-green">
+                                    <i data-lucide="seedling" class="w-6 h-6"></i>
+                                    <h4 class="font-bold uppercase tracking-wider text-sm" id="label-crops">What to
+                                        Plant</h4>
+                                </div>
+                                <ul id="guide-crops"
+                                    class="space-y-2 text-xl font-semibold text-stone-800 dark:text-stone-100">
+                                    <!-- Crops injected here -->
+                                </ul>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-3 text-agri-green">
+                                    <i data-lucide="droplets" class="w-6 h-6"></i>
+                                    <h4 class="font-bold uppercase tracking-wider text-sm" id="label-tips">Expert Tips
+                                    </h4>
+                                </div>
+                                <p id="guide-tips" class="text-stone-600 dark:text-stone-400 leading-relaxed">
+                                    <!-- Tips injected here -->
+                                </p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-3 text-agri-green">
+                                    <i data-lucide="calendar-check" class="w-6 h-6"></i>
+                                    <h4 class="font-bold uppercase tracking-wider text-sm" id="label-action">Essential
+                                        Action</h4>
+                                </div>
+                                <div
+                                    class="bg-white dark:bg-stone-900 p-6 rounded-2xl border border-stone-100 dark:border-stone-700">
+                                    <p id="guide-action" class="font-medium text-stone-700 dark:text-stone-300">
+                                        <!-- Action injected here -->
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section class="py-24 bg-stone-100 dark:bg-stone-900/30">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -448,6 +520,105 @@
             }
         ];
 
+        const farmingCalendar = {
+            January: {
+                crops: ["Tomatoes", "Peppers", "Legumes"],
+                cropsKN: ["ಟೊಮೆಟೊ", "ಮೆಣಸಿನಕಾಯಿ", "ದ್ವಿದಳ ಧಾನ್ಯಗಳು"],
+                tips: "Focus on soil preparation and nursery bed maintenance.",
+                tipsKN: "ಮಣ್ಣು ಹದಗೊಳಿಸುವಿಕೆ ಮತ್ತು ನರ್ಸರಿ ಬೆಡ್ ನಿರ್ವಹಣೆಯತ್ತ ಗಮನ ಹರಿಸಿ.",
+                action: "Mulching to conserve moisture.",
+                actionKN: "ತೇವಾಂಶ ಉಳಿಸಿಕೊಳ್ಳಲು ಮಲ್ಚಿಂಗ್ ಮಾಡಿ."
+            },
+            February: {
+                crops: ["Okra", "Cucumber", "Melons"],
+                cropsKN: ["ಬೆಂಡೆಕಾಯಿ", "ಸೌತೆಕಾಯಿ", "ಕಲ್ಲಂಗಡಿ"],
+                tips: "Provide shade for young seedlings as temperature rises.",
+                tipsKN: "ತಾಪಮಾನ ಏರುತ್ತಿದ್ದಂತೆ ಎಳೆಯ ಸಸಿಗಳಿಗೆ ನೆರಳು ನೀಡಿ.",
+                action: "Inspect for early pest infestations.",
+                actionKN: "ಆರಂಭಿಕ ಕೀಟಬಾಧೆಗಳ ಬಗ್ಗೆ ತಪಾಸಣೆ ಮಾಡಿ."
+            },
+            March: {
+                crops: ["Zucchini", "Radish", "Green Beans"],
+                cropsKN: ["ಜುಚ್ಚಿನಿ", "ಮೂಲಂಗಿ", "ಹಸಿರು ಬೀನ್ಸ್"],
+                tips: "Increase watering frequency and check soil moisture.",
+                tipsKN: "ನೀರಾವರಿ ಹೆಚ್ಚಿಸಿ ಮತ್ತು ಮಣ್ಣಿನ ತೇವಾಂಶವನ್ನು ಪರೀಕ್ಷಿಸಿ.",
+                action: "Add compost to boost early summer growth.",
+                actionKN: "ಬೇಸಿಗೆಯ ಆರಂಭಿಕ ಬೆಳವಣಿಗೆಗೆ ಕಾಂಪೋಸ್ಟ್ ಸೇರಿಸಿ."
+            },
+            April: {
+                crops: ["Corn", "Spinach", "Sunflowers"],
+                cropsKN: ["ಜೋಳ", "ಪಾಲಕ್", "ಸೂರ್ಯಕಾಂತಿ"],
+                tips: "Deep watering during cooler early hours.",
+                tipsKN: "ಮುಂಜಾನೆಯ ತಂಪಾದ ಸಮಯದಲ್ಲಿ ಆಳವಾಗಿ ನೀರುಣಿಸಿ.",
+                action: "Apply organic liquid fertilizer once a week.",
+                actionKN: "ವಾರಕ್ಕೊಮ್ಮೆ ಸಾವಯವ ದ್ರವ ಗೊಬ್ಬರ ಬಳಸಿ."
+            },
+            May: {
+                crops: ["Chillies", "Brinjal", "Squash"],
+                cropsKN: ["ಮೆಣಸಿನಕಾಯಿ", "ಬದನೆಕಾಯಿ", "ಕುಂಬಳಕಾಯಿ"],
+                tips: "Monitor for heat stress in sensitive crops.",
+                tipsKN: "ಸೂಕ್ಷ್ಮ ಬೆಳೆಗಳಲ್ಲಿ ಉಷ್ಣದ ಒತ್ತಡವನ್ನು ಗಮನಿಸಿ.",
+                action: "Prepare pits for monsoon planting.",
+                actionKN: "ಮುಂಗಾರು ನೆಡುವಿಕೆಗೆ ಗುಂಡಿಗಳನ್ನು ಸಿದ್ಧಪಡಿಸಿ."
+            },
+            June: {
+                crops: ["Paddy", "Ragi", "Sorghum"],
+                cropsKN: ["ಭತ್ತ", "ರಾಗಿ", "ಜೋಳ"],
+                tips: "Start sowing with the arrival of the first rains.",
+                tipsKN: "ಮೊದಲ ಮಳೆಯೊಂದಿಗೆ ಬಿತ್ತನೆ ಆರಂಭಿಸಿ.",
+                action: "Ensure proper drainage in the fields.",
+                actionKN: "ಹೊಲಗಳಲ್ಲಿ ಸರಿಯಾದ ಬಸಿಗಾಲುವೆ ವ್ಯವಸ್ಥೆ ಇರುವುದನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."
+            },
+            July: {
+                crops: ["Millets", "Turmeric", "Ginger"],
+                cropsKN: ["ಸಿರಿಧಾನ್ಯಗಳು", "ಅರಿಶಿನ", "ಶುಂಠಿ"],
+                tips: "Time for transplanting and organic weeding.",
+                tipsKN: "ನಾಟಿ ಮತ್ತು ಸಾವಯವ ಕಳೆ ತೆಗೆಯಲು ಇದು ಸರಿಯಾದ ಸಮಯ.",
+                action: "Monitor for fungal diseases during heavy rains.",
+                actionKN: "ಭಾರಿ ಮಳೆಯ ಸಮಯದಲ್ಲಿ ಶಿಲೀಂಧ್ರ ರೋಗಗಳ ಬಗ್ಗೆ ನಿಗಾ ಇರಿಸಿ."
+            },
+            August: {
+                crops: ["Onions", "Cabbage", "Carrots"],
+                cropsKN: ["ಈರುಳ್ಳಿ", "ಕೋಸು", "ಕ್ಯಾರೆಟ್"],
+                tips: "Focus on nutrient replenishment for late monsoon crops.",
+                tipsKN: "ಹಿಂಗಾರು ಬೆಳೆಗಳಿಗೆ ಪೋಷಕಾಂಶಗಳ ಮರುಪೂರಣದತ್ತ ಗಮನ ಹರಿಸಿ.",
+                action: "Green manuring and cover cropping.",
+                actionKN: "ಹಸಿರು ಗೊಬ್ಬರ ಮತ್ತು ಮಣ್ಣು ಮುಚ್ಚುವ ಬೆಳೆಗಳನ್ನು ಬೆಳೆಸಿ."
+            },
+            September: {
+                crops: ["Potatoes", "Garlic", "Beetroot"],
+                cropsKN: ["ಆಲೂಗಡ್ಡೆ", "ಬೆಳ್ಳುಳ್ಳಿ", "ಬೀಟ್‌ರೂಟ್"],
+                tips: "Harvesting early monsoon crops and preparing soil.",
+                tipsKN: "ಮುಂಗಾರು ಬೆಳೆಗಳ ಕೊಯ್ಲು ಮತ್ತು ಮಣ್ಣಿನ ಸಿದ್ಧತೆ.",
+                action: "Pruning and cleaning for fruit trees.",
+                actionKN: "ಹಣ್ಣಿನ ಮರಗಳ ಸಮರುವಿಕೆ ಮತ್ತು ಸ್ವಚ್ಛಗೊಳಿಸುವಿಕೆ."
+            },
+            October: {
+                crops: ["Wheat", "Mustard", "Chickpeas"],
+                cropsKN: ["ಗೋಧಿ", "ಸಾಸಿವೆ", "ಕಡಲೆ"],
+                tips: "Winter crop sowing begins as ground cools.",
+                tipsKN: "ಮಣ್ಣು ತಣ್ಣಗಾಗುತ್ತಿದ್ದಂತೆ ಚಳಿಗಾಲದ ಬೆಳೆ ಬಿತ್ತನೆ ಆರಂಭವಾಗುತ್ತದೆ.",
+                action: "Soil testing and liming if necessary.",
+                actionKN: "ಮಣ್ಣಿನ ಪರೀಕ್ಷೆ ಮತ್ತು ಅನಿವಾರ್ಯವಿದ್ದರೆ ಸುಣ್ಣ ಸೇರಿಸುವುದು."
+            },
+            November: {
+                crops: ["Peas", "Broccoli", "Lettuce"],
+                cropsKN: ["ಬಟಾಣಿ", "ಬ್ರೊಕೋಲಿ", "ಲೆಟಿಸ್"],
+                tips: "Use mulching to protect roots from early winter frost.",
+                tipsKN: "ಚಳಿಗಾಲದ ಹಿಮದಿಂದ ಬೇರುಗಳನ್ನು ರಕ್ಷಿಸಲು ಮಲ್ಚಿಂಗ್ ಬಳಸಿ.",
+                action: "Irrigation management for moisture-loving winter crops.",
+                actionKN: "ಚಳಿಗಾಲದ ಬೆಳೆಗಳಿಗೆ ನೀರಾವರಿ ನಿರ್ವಹಣೆ."
+            },
+            December: {
+                crops: ["Strawberry", "Cauliflower", "Radish"],
+                cropsKN: ["ಸ್ಟ್ರಾಬೆರಿ", "ಹೂಕೋಸು", "ಮೂಲಂಗಿ"],
+                tips: "Slow down watering but ensure base moisture.",
+                tipsKN: "ನೀರಾವರಿ ಕಡಿಮೆ ಮಾಡಿ ಆದರೆ ತಳದಲ್ಲಿ ತೇವಾಂಶ ಇರಲಿ.",
+                action: "Review the year's success and plan for the next cycle.",
+                actionKN: "ವರ್ಷದ ಯಶಸ್ಸನ್ನು ಅವಲೋಕಿಸಿ ಮುಂದಿನ ಯೋಜನೆ ರೂಪಿಸಿ."
+            }
+        };
+
         const translations = {
             EN: {
                 heroTitle: "Cultivate abundance with <span class='text-agri-green'>premium inputs</span>",
@@ -461,7 +632,7 @@
                 subtotal: "Subtotal",
                 checkout: "Proceed to Checkout",
                 contactTitle: "Expert Farming Advice",
-                contactSub: "Connect with our agricultural specialists on WhatsApp for personalized recommendations.",
+                contactSub: "Connect with our agricultural specialists on WhatsApp for personalized recommendations and bulk orders.",
                 nameLabel: "Full Name",
                 subjectLabel: "Subject",
                 messageLabel: "Message",
@@ -474,7 +645,14 @@
                 catSeeds: "Seeds",
                 catFertilizer: "Fertilizer",
                 catTools: "Tools",
-                searchPlaceholder: "Search products..."
+                searchPlaceholder: "Search products...",
+                farmingTitle: "Farmer's Seasonal Guide",
+                farmingSub: "Monthly recommendations for your successful harvest.",
+                whatToPlant: "What to Plant",
+                farmingTips: "Expert Tips",
+                farmingAction: "Essential Action",
+                monJan: "Jan", monFeb: "Feb", monMar: "Mar", monApr: "Apr", monMay: "May", monJun: "Jun",
+                monJul: "Jul", monAug: "Aug", monSep: "Sep", monOct: "Oct", monNov: "Nov", monDec: "Dec"
             },
             KN: {
                 heroTitle: "<span class='text-agri-green'>ಪ್ರೀಮಿಯಂ ಉತ್ಪನ್ನಗಳೊಂದಿಗೆ</span> ಸಮೃದ್ಧಿಯನ್ನು ಬೆಳೆಸಿಕೊಳ್ಳಿ",
@@ -501,7 +679,14 @@
                 catSeeds: "ಬೀಜಗಳು",
                 catFertilizer: "ಗೊಬ್ಬರಗಳು",
                 catTools: "ಸಲಕರಣೆಗಳು",
-                searchPlaceholder: "ಉತ್ಪನ್ನಗಳನ್ನು ಹುಡುಕಿ..."
+                searchPlaceholder: "ಉತ್ಪನ್ನಗಳನ್ನು ಹುಡುಕಿ...",
+                farmingTitle: "ರೈತರ ಕಾಲೋಚಿತ ಮಾರ್ಗದರ್ಶಿ",
+                farmingSub: "ನಿಮ್ಮ ಯಶಸ್ವಿ ಸುಗ್ಗಿಗಾಗಿ ಮಾಸಿಕ ಶಿಫಾರಸುಗಳು.",
+                whatToPlant: "ಏನು ಬಿತ್ತನೆ ಮಾಡಬೇಕು",
+                farmingTips: "ತಜ್ಞರ ಸಲಹೆಗಳು",
+                farmingAction: "ಅಗತ್ಯ ಕ್ರಮ",
+                monJan: "ಜನವರಿ", monFeb: "ಫೆಬ್ರವರಿ", monMar: "ಮಾರ್ಚ್", monApr: "ಏಪ್ರಿಲ್", monMay: "ಮೇ", monJun: "ಜೂನ್",
+                monJul: "ಜುಲೈ", monAug: "ಆಗಸ್ಟ್", monSep: "ಸೆಪ್ಟೆಂಬರ್", monOct: "ಅಕ್ಟೋಬರ್", monNov: "ನವೆಂಬರ್", monDec: "ಡಿಸೆಂಬರ್"
             }
         };
 
@@ -517,8 +702,59 @@
             updateLanguageUI();
             updateCartUI();
             renderProducts(products);
+            initFarmingGuide();
             lucide.createIcons();
         };
+
+        // Farming Guide Logic
+        function initFarmingGuide() {
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const selector = document.getElementById('month-selector');
+            const currentMonthIndex = new Date().getMonth();
+            const currentMonth = months[currentMonthIndex];
+
+            selector.innerHTML = '';
+            months.forEach((m, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `month-btn px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap text-left border ${idx === currentMonthIndex ? 'bg-agri-green text-white border-transparent' : 'border-stone-200 dark:border-stone-700 hover:border-agri-green'}`;
+                btn.innerText = translations[language][`mon${m.substring(0, 3)}`];
+                btn.onclick = () => selectMonth(m);
+                selector.appendChild(btn);
+            });
+
+            selectMonth(currentMonth);
+        }
+
+        function selectMonth(month) {
+            const data = farmingCalendar[month];
+            const btnText = translations[language][`mon${month.substring(0, 3)}`];
+
+            // Update UI
+            document.querySelectorAll('.month-btn').forEach(btn => {
+                if (btn.innerText === btnText) {
+                    btn.classList.add('bg-agri-green', 'text-white', 'border-transparent');
+                    btn.classList.remove('border-stone-200', 'dark:border-stone-700');
+                } else {
+                    btn.classList.remove('bg-agri-green', 'text-white', 'border-transparent');
+                    btn.classList.add('border-stone-200', 'dark:border-stone-700');
+                }
+            });
+
+            const cropsList = document.getElementById('guide-crops');
+            cropsList.innerHTML = '';
+            const crops = language === 'KN' ? data.cropsKN : data.crops;
+            crops.forEach(c => {
+                const li = document.createElement('li');
+                li.className = "flex items-center gap-2";
+                li.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-agri-green"></i> ${c}`;
+                cropsList.appendChild(li);
+            });
+
+            document.getElementById('guide-tips').innerText = language === 'KN' ? data.tipsKN : data.tips;
+            document.getElementById('guide-action').innerText = language === 'KN' ? data.actionKN : data.action;
+
+            lucide.createIcons();
+        }
 
         // Language
         function toggleLanguage() {
@@ -587,6 +823,20 @@
             if (waBtn) {
                 waBtn.innerHTML = `<i data-lucide="phone" class="w-5 h-5"></i> ${t.sendWhatsApp}`;
             }
+
+            // Farming Guide
+            const farmingTitle = document.getElementById('farming-title');
+            if (farmingTitle) farmingTitle.innerText = t.farmingTitle;
+            const farmingSub = document.getElementById('farming-sub');
+            if (farmingSub) farmingSub.innerText = t.farmingSub;
+            const labelCrops = document.getElementById('label-crops');
+            if (labelCrops) labelCrops.innerText = t.whatToPlant;
+            const labelTips = document.getElementById('label-tips');
+            if (labelTips) labelTips.innerText = t.farmingTips;
+            const labelAction = document.getElementById('label-action');
+            if (labelAction) labelAction.innerText = t.farmingAction;
+
+            initFarmingGuide(); // Re-init selector buttons with new language titles
 
             lucide.createIcons();
         }
