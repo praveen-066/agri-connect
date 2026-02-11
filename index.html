@@ -1526,12 +1526,19 @@
             }
 
             try {
+                console.log("Attempting to sign up:", email);
                 const credential = await auth.createUserWithEmailAndPassword(email, password);
                 await credential.user.updateProfile({ displayName: name });
                 showToast("Account created successfully!");
+                console.log("Signup successful for:", email);
                 toggleAuthModal();
             } catch (error) {
-                showToast(error.message, true);
+                console.error("Signup error:", error.code, error.message);
+                let userFriendlyMsg = error.message;
+                if (error.code === 'auth/operation-not-allowed') {
+                    userFriendlyMsg = "Email/Password is not enabled in Firebase Authentication. Please enable it in your console.";
+                }
+                showToast(userFriendlyMsg, true);
             }
         }
 
@@ -1545,10 +1552,12 @@
             }
 
             try {
+                console.log("Attempting login:", email);
                 await auth.signInWithEmailAndPassword(email, password);
                 showToast("Logged in successfully!");
                 toggleAuthModal();
             } catch (error) {
+                console.error("Login error:", error.code, error.message);
                 showToast(error.message, true);
             }
         }
