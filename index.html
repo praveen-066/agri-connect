@@ -8,7 +8,25 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyANbIxH7LIQJ_WuG6Gnk8HzY1czN9tJD6s",
+            authDomain: "agristore-97cf3.firebaseapp.com",
+            projectId: "agristore-97cf3",
+            storageBucket: "agristore-97cf3.firebasestorage.app",
+            messagingSenderId: "251965763575",
+            appId: "1:251965763575:web:75737e70e60c3b9a5948f2",
+            measurementId: "G-917EPBTVNZ"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -95,6 +113,12 @@
                         <i data-lucide="shopping-cart" class="w-6 h-6 text-stone-600 dark:text-stone-400"></i>
                         <span id="cart-badge"
                             class="hidden absolute -top-1 -right-1 bg-agri-accent text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm">0</span>
+                    </button>
+                    <!-- Auth Button -->
+                    <button id="auth-btn" onclick="toggleAuthModal()"
+                        class="flex items-center gap-2 bg-stone-900 dark:bg-white text-white dark:text-stone-900 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:bg-agri-green hover:text-white">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span id="auth-btn-text">Login</span>
                     </button>
                 </div>
             </div>
@@ -1382,25 +1406,47 @@
             document.body.classList.remove('cart-open');
         }
 
-        function confirmOrder() {
+        async function confirmOrder() {
             const payment = document.querySelector('input[name="payment"]:checked').value;
             const name = document.getElementById('checkout-name').value;
             const phone = document.getElementById('checkout-phone').value;
             const address = document.getElementById('checkout-address').value;
 
+            const orderId = 'ORD' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            const orderData = {
+                orderId,
+                name,
+                phone,
+                address,
+                payment,
+                items: cart.map(item => ({
+                    name: language === 'KN' ? item.nameKN : item.name,
+                    quantity: item.quantity,
+                    price: item.price
+                })),
+                total
+            };
+
+            // Save to Firebase if logged in
+            if (currentUser) {
+                await saveOrderToFirestore(orderData);
+                loadOrders();
+            }
+
             let orderDetails = translations[language].orderMsg + `\n\n`;
+            orderDetails += `*🆔 Order ID:* ${orderId}\n`;
             orderDetails += `*👤 Customer:* ${name}\n`;
             orderDetails += `*📞 Phone:* ${phone}\n`;
             orderDetails += `*📍 Address:* ${address}\n`;
             orderDetails += `*💳 Payment:* ${payment}\n\n`;
             orderDetails += `*📦 Items:*\n`;
 
-            cart.forEach(item => {
-                const itemName = language === 'KN' ? item.nameKN : item.name;
-                orderDetails += `- ${itemName} (x${item.quantity}) - ₹${item.price * item.quantity}\n`;
+            orderData.items.forEach(item => {
+                orderDetails += `- ${item.name} (x${item.quantity}) - ₹${item.price * item.quantity}\n`;
             });
 
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             orderDetails += `\n*💰 Total Amount:* ₹${total}`;
 
             const url = `https://wa.me/916360760312?text=${encodeURIComponent(orderDetails)}`;
@@ -1433,12 +1479,157 @@
             openCheckout();
         }
 
+        let currentUser = null;
+
+        // Firebase Auth Logic
+        auth.onAuthStateChanged((user) => {
+            currentUser = user;
+            if (user) {
+                document.getElementById('auth-btn-text').innerText = user.displayName || 'Profile';
+                document.getElementById('my-orders').classList.remove('hidden');
+                loadOrders();
+            } else {
+                document.getElementById('auth-btn-text').innerText = 'Login';
+                document.getElementById('my-orders').classList.add('hidden');
+            }
+        });
+
+        function toggleAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            } else {
+                modal.classList.add('opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        function switchAuthView(view) {
+            if (view === 'signup') {
+                document.getElementById('auth-login-view').classList.add('hidden');
+                document.getElementById('auth-signup-view').classList.remove('hidden');
+            } else {
+                document.getElementById('auth-login-view').classList.remove('hidden');
+                document.getElementById('auth-signup-view').classList.add('hidden');
+            }
+        }
+
+        async function handleSignup() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            if (!name || !email || !password) {
+                showToast("Please fill all fields", true);
+                return;
+            }
+
+            try {
+                const credential = await auth.createUserWithEmailAndPassword(email, password);
+                await credential.user.updateProfile({ displayName: name });
+                showToast("Account created successfully!");
+                toggleAuthModal();
+            } catch (error) {
+                showToast(error.message, true);
+            }
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                showToast("Please fill all fields", true);
+                return;
+            }
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showToast("Logged in successfully!");
+                toggleAuthModal();
+            } catch (error) {
+                showToast(error.message, true);
+            }
+        }
+
+        function handleLogout() {
+            auth.signOut();
+            showToast("Logged out successfully");
+            document.getElementById('orders-list').innerHTML = '<div id="no-orders-msg" class="text-center py-24 bg-white dark:bg-stone-900 rounded-3xl border border-stone-100 dark:border-stone-800"><p class="text-stone-500 italic">No orders found yet.</p></div>';
+        }
+
+        async function saveOrderToFirestore(orderData) {
+            if (!currentUser) return;
+            try {
+                await db.collection('orders').add({
+                    ...orderData,
+                    userId: currentUser.uid,
+                    userEmail: currentUser.email,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Error saving order:", error);
+            }
+        }
+
+        async function loadOrders() {
+            if (!currentUser) return;
+            const list = document.getElementById('orders-list');
+
+            try {
+                const snapshot = await db.collection('orders')
+                    .where('userId', '==', currentUser.uid)
+                    .orderBy('timestamp', 'desc')
+                    .get();
+
+                if (snapshot.empty) {
+                    return;
+                }
+
+                list.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const order = doc.data();
+                    const date = order.timestamp ? order.timestamp.toDate().toLocaleDateString() : 'Recent';
+
+                    const orderEl = document.createElement('div');
+                    orderEl.className = 'bg-white dark:bg-stone-900 p-6 rounded-3xl border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-md transition-all';
+                    orderEl.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-xs font-bold text-agri-green uppercase tracking-wider mb-1">Order #${doc.id.slice(0, 8)}</p>
+                                <p class="text-xl font-bold">${date}</p>
+                            </div>
+                            <span class="px-3 py-1 bg-stone-100 dark:bg-stone-800 rounded-full text-xs font-bold">Confirmed</span>
+                        </div>
+                        <div class="space-y-2 mb-4">
+                            ${order.items.map(item => `
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-stone-500">${item.name} x${item.quantity}</span>
+                                    <span class="font-bold">₹${item.price * item.quantity}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="pt-4 border-t border-stone-50 dark:border-stone-800 flex justify-between items-center">
+                            <p class="text-stone-500 text-sm">Payment: ${order.payment}</p>
+                            <p class="text-xl font-bold text-agri-green">Total: ₹${order.total}</p>
+                        </div>
+                    `;
+                    list.appendChild(orderEl);
+                });
+            } catch (error) {
+                console.error("Error loading orders:", error);
+            }
+        }
+
         function showToast(msg, isError = false) {
             const toast = document.getElementById('toast');
             const msgEl = document.getElementById('toast-msg');
             if (toast && msgEl) {
                 msgEl.innerText = msg;
                 toast.classList.remove('hidden', 'translate-y-20');
+                if (isError) toast.classList.add('bg-red-500');
+                else toast.classList.remove('bg-red-500');
                 setTimeout(() => {
                     toast.classList.add('translate-y-20');
                     setTimeout(() => toast.classList.add('hidden'), 300);
@@ -1446,6 +1637,71 @@
             }
         }
     </script>
+    <!-- Auth Modal -->
+    <div id="auth-modal" onclick="toggleAuthModal()"
+        class="fixed inset-0 bg-stone-900/80 backdrop-blur-md z-[100] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div onclick="event.stopPropagation()"
+            class="bg-white dark:bg-stone-900 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl relative p-8">
+            <button onclick="toggleAuthModal()"
+                class="absolute top-4 right-4 p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors font-bold">✕</button>
+            <div id="auth-login-view" class="space-y-6">
+                <h2 class="text-3xl font-bold">Welcome Back</h2>
+                <div class="space-y-4">
+                    <input type="email" id="login-email"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 outline-none"
+                        placeholder="Email Address">
+                    <input type="password" id="login-password"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 outline-none"
+                        placeholder="Password">
+                    <button onclick="handleLogin()"
+                        class="w-full bg-agri-green text-white font-bold py-4 rounded-xl transition-all">Sign
+                        In</button>
+                </div>
+                <p class="text-center text-sm text-stone-500">Don't have an account? <a href="javascript:void(0)"
+                        onclick="switchAuthView('signup')" class="text-agri-green font-bold">Sign Up</a></p>
+            </div>
+            <div id="auth-signup-view" class="hidden space-y-6">
+                <h2 class="text-3xl font-bold">Create Account</h2>
+                <div class="space-y-4">
+                    <input type="text" id="signup-name"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 outline-none"
+                        placeholder="Full Name">
+                    <input type="email" id="signup-email"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 outline-none"
+                        placeholder="Email Address">
+                    <input type="password" id="signup-password"
+                        class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 outline-none"
+                        placeholder="Password">
+                    <button onclick="handleSignup()"
+                        class="w-full bg-agri-green text-white font-bold py-4 rounded-xl transition-all">Create
+                        Account</button>
+                </div>
+                <p class="text-center text-sm text-stone-500">Already have an account? <a href="javascript:void(0)"
+                        onclick="switchAuthView('login')" class="text-agri-green font-bold">Log In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Orders Section (Hidden by Default) -->
+    <section id="my-orders" class="py-24 bg-stone-50 dark:bg-stone-950 hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+                <div>
+                    <h2 class="text-3xl font-bold text-stone-900 dark:text-white mb-2">My Order History</h2>
+                    <p class="text-stone-500 dark:text-stone-400">Track your agricultural purchases.</p>
+                </div>
+                <button onclick="handleLogout()"
+                    class="px-6 py-2 rounded-xl border border-red-500 text-red-500 font-bold hover:bg-red-500 hover:text-white transition-all">Sign
+                    Out</button>
+            </div>
+            <div id="orders-list" class="grid gap-6">
+                <div id="no-orders-msg"
+                    class="text-center py-24 bg-white dark:bg-stone-900 rounded-3xl border border-stone-100 dark:border-stone-800">
+                    <p class="text-stone-500 italic">No orders found yet.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 
 </html>
