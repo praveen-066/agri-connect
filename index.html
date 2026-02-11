@@ -258,8 +258,34 @@
                 class="absolute top-4 right-4 p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-full transition-colors">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
-            <h2 class="text-2xl font-bold mb-6">Complete Your Order</h2>
-            <div class="space-y-4">
+
+            <!-- Step Indicators -->
+            <div class="flex justify-between mb-8 px-4">
+                <div class="flex flex-col items-center gap-2">
+                    <div id="step-dot-1"
+                        class="w-8 h-8 rounded-full bg-agri-green text-white flex items-center justify-center text-xs font-bold transition-all">
+                        1</div>
+                    <span class="text-[10px] uppercase tracking-wider font-bold text-agri-green">Details</span>
+                </div>
+                <div class="flex-1 h-[2px] bg-stone-100 dark:bg-stone-800 mt-4 mx-2" id="step-line-1"></div>
+                <div class="flex flex-col items-center gap-2">
+                    <div id="step-dot-2"
+                        class="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-400 flex items-center justify-center text-xs font-bold transition-all">
+                        2</div>
+                    <span class="text-[10px] uppercase tracking-wider font-bold text-stone-400">Verify</span>
+                </div>
+                <div class="flex-1 h-[2px] bg-stone-100 dark:bg-stone-800 mt-4 mx-2" id="step-line-2"></div>
+                <div class="flex flex-col items-center gap-2">
+                    <div id="step-dot-3"
+                        class="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-400 flex items-center justify-center text-xs font-bold transition-all">
+                        3</div>
+                    <span class="text-[10px] uppercase tracking-wider font-bold text-stone-400">Payment</span>
+                </div>
+            </div>
+
+            <!-- Step 1: Delivery Details -->
+            <div id="checkout-step-1" class="space-y-4">
+                <h2 class="text-2xl font-bold mb-4">Delivery Details</h2>
                 <div>
                     <label class="block text-sm font-semibold mb-1">Full Name</label>
                     <input type="text" id="checkout-name"
@@ -278,16 +304,121 @@
                         class="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:ring-2 focus:ring-agri-green outline-none"
                         placeholder="Street, City, Pincode"></textarea>
                 </div>
-                <div class="pt-4 border-t border-stone-100 dark:border-stone-800">
+                <div class="pt-6 border-t border-stone-100 dark:border-stone-800">
                     <div class="flex justify-between items-center mb-6">
-                        <span class="text-stone-500 font-medium">Grand Total</span>
-                        <span id="checkout-total" class="text-2xl font-bold text-agri-green">₹0</span>
+                        <span class="text-stone-500 font-medium">Subtotal</span>
+                        <span class="checkout-grand-total text-2xl font-bold text-agri-green">₹0</span>
                     </div>
-                    <button onclick="confirmOrder()"
+                    <button onclick="nextCheckoutStep()"
                         class="w-full bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">
-                        Confirm & Order via WhatsApp
+                        Continue to Verification
                     </button>
                 </div>
+            </div>
+
+            <!-- Step 2: Number Verification -->
+            <div id="checkout-step-2" class="hidden space-y-6 text-center py-4">
+                <div
+                    class="w-20 h-20 bg-agri-light dark:bg-agri-green/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="shield-check" class="w-10 h-10 text-agri-green"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold mb-2">Verify Phone Number</h2>
+                    <p class="text-stone-500 text-sm">We've sent a 4-digit code to <span id="display-phone"
+                            class="font-bold text-stone-900 dark:text-white"></span></p>
+                </div>
+                <div class="flex justify-center gap-3">
+                    <input type="text" maxlength="1"
+                        class="otp-input w-12 h-14 text-2xl font-bold text-center rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:border-agri-green outline-none transition-all">
+                    <input type="text" maxlength="1"
+                        class="otp-input w-12 h-14 text-2xl font-bold text-center rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:border-agri-green outline-none transition-all">
+                    <input type="text" maxlength="1"
+                        class="otp-input w-12 h-14 text-2xl font-bold text-center rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:border-agri-green outline-none transition-all">
+                    <input type="text" maxlength="1"
+                        class="otp-input w-12 h-14 text-2xl font-bold text-center rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 focus:border-agri-green outline-none transition-all">
+                </div>
+                <p class="text-stone-400 text-xs mt-4">Hint: Use <span class="font-bold">1234</span> for demo</p>
+                <div class="flex gap-4 pt-6">
+                    <button onclick="prevCheckoutStep()"
+                        class="flex-1 px-6 py-4 rounded-xl font-bold border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-800 transition-all">Back</button>
+                    <button onclick="verifyOTP()"
+                        class="flex-[2] bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">Verify
+                        & Continue</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Payment Method -->
+            <div id="checkout-step-3" class="hidden space-y-6">
+                <h2 class="text-2xl font-bold mb-4">Select Payment</h2>
+                <div class="space-y-3">
+                    <label
+                        class="flex items-center gap-4 p-4 rounded-2xl border-2 border-agri-green bg-agri-light/10 dark:bg-agri-green/5 cursor-pointer transition-all">
+                        <input type="radio" name="payment" value="UPI" checked class="w-5 h-5 accent-agri-green">
+                        <div class="flex-1">
+                            <span class="font-bold block">UPI (PhonePe, GPay, Paytm)</span>
+                            <span class="text-xs text-stone-500">Fast & Secure</span>
+                        </div>
+                        <i data-lucide="smartphone" class="w-6 h-6 text-agri-green"></i>
+                    </label>
+                    <label
+                        class="flex items-center gap-4 p-4 rounded-2xl border-2 border-stone-100 dark:border-stone-800 hover:border-agri-green/30 cursor-pointer transition-all">
+                        <input type="radio" name="payment" value="Card" class="w-5 h-5 accent-agri-green">
+                        <div class="flex-1">
+                            <span class="font-bold block">Credit / Debit Card</span>
+                            <span class="text-xs text-stone-500">All major cards supported</span>
+                        </div>
+                        <i data-lucide="credit-card" class="w-6 h-6 text-stone-400"></i>
+                    </label>
+                    <label
+                        class="flex items-center gap-4 p-4 rounded-2xl border-2 border-stone-100 dark:border-stone-800 hover:border-agri-green/30 cursor-pointer transition-all">
+                        <input type="radio" name="payment" value="COD" class="w-5 h-5 accent-agri-green">
+                        <div class="flex-1">
+                            <span class="font-bold block">Cash on Delivery</span>
+                            <span class="text-xs text-stone-500">Pay when you receive</span>
+                        </div>
+                        <i data-lucide="banknote" class="w-6 h-6 text-stone-400"></i>
+                    </label>
+                </div>
+                <div class="pt-6 border-t border-stone-100 dark:border-stone-800">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-stone-500 font-medium">Grand Total</span>
+                        <span class="checkout-grand-total text-2xl font-bold text-agri-green">₹0</span>
+                    </div>
+                    <div class="flex gap-4">
+                        <button onclick="prevCheckoutStep()"
+                            class="flex-1 px-6 py-4 rounded-xl font-bold border border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-800 transition-all">Back</button>
+                        <button onclick="confirmOrder()"
+                            class="flex-[2] bg-agri-green hover:bg-agri-dark text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-agri-green/20">Place
+                            Order</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Success Content -->
+            <div id="checkout-step-4" class="hidden text-center py-8 space-y-6">
+                <div
+                    class="w-24 h-24 bg-agri-green/10 rounded-full flex items-center justify-center mx-auto mb-4 relative">
+                    <div class="absolute inset-0 bg-agri-green rounded-full animate-ping opacity-20"></div>
+                    <i data-lucide="check-circle-2" class="w-12 h-12 text-agri-green relative z-10"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-stone-900 dark:text-white mb-2">Order Confirmed!</h2>
+                    <p class="text-stone-500">Your harvest is on its way. We've sent the details to your WhatsApp.</p>
+                </div>
+                <div
+                    class="bg-stone-50 dark:bg-stone-800/50 p-6 rounded-3xl border border-stone-100 dark:border-stone-700">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-stone-500 text-sm">Order ID</span>
+                        <span class="font-bold text-sm">#AGRI-${Math.floor(Math.random() * 900000) + 100000}</span>
+                    </div>
+                    <div class="flex justify-between text-agri-green">
+                        <span class="font-bold">Total Paid</span>
+                        <span class="checkout-grand-total font-bold">₹0</span>
+                    </div>
+                </div>
+                <button onclick="closeCheckout(); window.location.hash = 'products';"
+                    class="w-full bg-stone-900 dark:bg-white text-white dark:text-stone-900 font-bold py-4 rounded-xl hover:bg-agri-green hover:text-white transition-all">Continue
+                    Shopping</button>
             </div>
         </div>
     </div>
@@ -695,6 +826,7 @@
         let currentCategory = 'All';
         let isDarkMode = localStorage.getItem('agri_theme') === 'dark';
         let language = localStorage.getItem('agri_lang') || 'EN';
+        let checkoutStep = 1;
 
         // Init
         window.onload = () => {
@@ -1129,13 +1261,118 @@
                 showToast("Your cart is empty!", true);
                 return;
             }
+            checkoutStep = 1;
+            updateCheckoutUI();
+
             const modal = document.getElementById('checkout-modal');
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            document.getElementById('checkout-total').innerText = `₹${total}`;
+            document.querySelectorAll('.checkout-grand-total').forEach(el => el.innerText = `₹${total}`);
 
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.remove('opacity-0'), 10);
             document.body.classList.add('cart-open');
+
+            // Setup OTP input listeners
+            const inputs = document.querySelectorAll('.otp-input');
+            inputs.forEach((input, index) => {
+                input.onkeyup = (e) => {
+                    if (e.target.value.length === 1 && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                    if (e.key === 'Backspace' && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                };
+            });
+        }
+
+        function updateCheckoutUI() {
+            // Hide all steps
+            for (let i = 1; i <= 4; i++) {
+                const stepEl = document.getElementById(`checkout-step-${i}`);
+                if (stepEl) stepEl.classList.add('hidden');
+
+                // Update indicators
+                const dot = document.getElementById(`step-dot-${i}`);
+                const line = document.getElementById(`step-line-${i}`);
+                const label = dot ? dot.nextElementSibling : null;
+
+                if (dot) {
+                    if (i < checkoutStep) {
+                        dot.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i>';
+                        dot.classList.add('bg-agri-green', 'text-white');
+                        dot.classList.remove('bg-stone-100', 'text-stone-400', 'dark:bg-stone-800');
+                        if (label) label.classList.add('text-agri-green');
+                    } else if (i === checkoutStep) {
+                        dot.innerText = i;
+                        dot.classList.add('bg-agri-green', 'text-white');
+                        dot.classList.remove('bg-stone-100', 'text-stone-400', 'dark:bg-stone-800');
+                        if (label) label.classList.add('text-agri-green');
+                    } else {
+                        dot.innerText = i;
+                        dot.classList.add('bg-stone-100', 'text-stone-400', 'dark:bg-stone-800');
+                        dot.classList.remove('bg-agri-green', 'text-white');
+                        if (label) {
+                            label.classList.remove('text-agri-green');
+                            label.classList.add('text-stone-400');
+                        }
+                    }
+                }
+
+                if (line) {
+                    if (i < checkoutStep) line.classList.add('bg-agri-green');
+                    else line.classList.remove('bg-agri-green');
+                }
+            }
+
+            // Show current step
+            const currentStepEl = document.getElementById(`checkout-step-${checkoutStep}`);
+            if (currentStepEl) currentStepEl.classList.remove('hidden');
+
+            lucide.createIcons();
+        }
+
+        function nextCheckoutStep() {
+            if (checkoutStep === 1) {
+                const name = document.getElementById('checkout-name').value;
+                const phone = document.getElementById('checkout-phone').value;
+                const address = document.getElementById('checkout-address').value;
+
+                if (!name || !phone || !address) {
+                    showToast("Please fill in all details", true);
+                    return;
+                }
+                document.getElementById('display-phone').innerText = phone;
+            }
+
+            checkoutStep++;
+            updateCheckoutUI();
+        }
+
+        function prevCheckoutStep() {
+            if (checkoutStep > 1) {
+                checkoutStep--;
+                updateCheckoutUI();
+            }
+        }
+
+        function verifyOTP() {
+            const inputs = document.querySelectorAll('.otp-input');
+            const otp = Array.from(inputs).map(i => i.value).join('');
+
+            if (otp === '1234') {
+                showToast("Phone verified successfully!");
+                checkoutStep = 3;
+                updateCheckoutUI();
+            } else {
+                showToast("Invalid code. Try 1234", true);
+                inputs.forEach(i => {
+                    i.value = '';
+                    i.classList.add('border-red-500');
+                    setTimeout(() => i.classList.remove('border-red-500'), 1000);
+                });
+                inputs[0].focus();
+            }
         }
 
         function closeCheckout() {
@@ -1146,19 +1383,16 @@
         }
 
         function confirmOrder() {
+            const payment = document.querySelector('input[name="payment"]:checked').value;
             const name = document.getElementById('checkout-name').value;
             const phone = document.getElementById('checkout-phone').value;
             const address = document.getElementById('checkout-address').value;
 
-            if (!name || !phone || !address) {
-                alert("Please fill in all checkout details!");
-                return;
-            }
-
             let orderDetails = translations[language].orderMsg + `\n\n`;
             orderDetails += `*👤 Customer:* ${name}\n`;
             orderDetails += `*📞 Phone:* ${phone}\n`;
-            orderDetails += `*📍 Address:* ${address}\n\n`;
+            orderDetails += `*📍 Address:* ${address}\n`;
+            orderDetails += `*💳 Payment:* ${payment}\n\n`;
             orderDetails += `*📦 Items:*\n`;
 
             cart.forEach(item => {
@@ -1172,13 +1406,15 @@
             const url = `https://wa.me/916360760312?text=${encodeURIComponent(orderDetails)}`;
             window.open(url, '_blank');
 
+            // Show Success Step
+            checkoutStep = 4;
+            updateCheckoutUI();
+
             // Success cleanup
             cart = [];
             saveCart();
             updateCartUI();
-            closeCheckout();
             if (!document.getElementById('cart-sidebar').classList.contains('translate-x-full')) toggleCart();
-            showToast("Order sent successfully!");
         }
 
         function checkout() {
