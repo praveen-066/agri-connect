@@ -159,8 +159,8 @@
                             class="w-full px-5 py-4 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 outline-none focus:ring-2 focus:ring-agri-green"
                             placeholder="Password">
                         <button onclick="handleGateSignup()"
-                            class="w-full bg-agri-green text-white font-bold py-5 rounded-2xl transition-all shadow-lg shadow-agri-green/20 hover:scale-[1.02]">Create
-                            Free Account</button>
+                            class="w-full bg-agri-green text-white font-bold py-5 rounded-2xl transition-all shadow-lg shadow-agri-green/20 hover:scale-[1.02]">ಖಾತೆಯನ್ನು
+                            ರಚಿಸಿ</button>
                     </div>
                     <p class="text-center text-sm text-stone-500">ಈಗಾಗಲೇ ಖಾತೆ ಹೊಂದಿದ್ದೀರಾ? <a href="javascript:void(0)"
                             onclick="switchGateView('login')" class="text-agri-green font-bold hover:underline">ಲಾಗ್
@@ -697,11 +697,6 @@
         </footer>
 
         <!-- Toast Notification -->
-        <div id="toast"
-            class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-stone-900 dark:bg-agri-green text-white px-6 py-3 rounded-full shadow-2xl z-[100] hidden transform translate-y-20 transition-all duration-300 flex items-center gap-3">
-            <i data-lucide="check-circle" class="w-5 h-5 text-agri-green dark:text-white"></i>
-            <span id="toast-msg">Added to cart</span>
-        </div>
 
         <script>
             // Data
@@ -1620,11 +1615,13 @@
             async function handleGateLogin() {
                 const email = document.getElementById('gate-login-email').value;
                 const password = document.getElementById('gate-login-password').value;
+                console.log("Gate login attempt:", email);
                 if (!email || !password) { showToast("Please fill all fields", true); return; }
                 try {
                     await auth.signInWithEmailAndPassword(email, password);
                     showToast("Welcome back!");
                 } catch (error) {
+                    console.error("Gate login error:", error.code, error.message);
                     showToast(error.message, true);
                 }
             }
@@ -1633,12 +1630,14 @@
                 const name = document.getElementById('gate-signup-name').value;
                 const email = document.getElementById('gate-signup-email').value;
                 const password = document.getElementById('gate-signup-password').value;
+                console.log("Gate signup attempt:", email);
                 if (!name || !email || !password) { showToast("Please fill all fields", true); return; }
                 try {
                     const cred = await auth.createUserWithEmailAndPassword(email, password);
                     await cred.user.updateProfile({ displayName: name });
                     showToast("Account created successfully!");
                 } catch (error) {
+                    console.error("Gate signup error:", error.code, error.message);
                     showToast(error.message, true);
                 }
             }
